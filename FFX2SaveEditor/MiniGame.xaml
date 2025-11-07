@@ -5,30 +5,180 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFX2SaveEditor"
         mc:Ignorable="d"
-        Title="MiniGame" Height="341.95" Width="404.873"
+        Title="Mini-Games (Advanced)" Height="760" Width="480"
         ResizeMode="NoResize"
         Icon="Resources/tonberry.gif"
         Loaded="Window_Loaded">
-    <Grid Margin="0,0,5,2.5">
-        <Button x:Name="btnCancel" Style="{StaticResource Ffx2Button}" Margin="0,0,105,9.5" Click="btnCancel_Click" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right" Width="90" Height="32" VerticalAlignment="Bottom">
-            <Button.Effect>
-                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
-            </Button.Effect>
-            <TextBlock Text="Cancel" Foreground="#E1E1E1">
-                <TextBlock.Effect>
-                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
-                </TextBlock.Effect>
-            </TextBlock>
-        </Button>
-        <Button x:Name="btnOK" Style="{StaticResource Ffx2Button}" Margin="0,0,10,9.5" Click="btnOK_Click" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right" Width="90" Height="32" VerticalAlignment="Bottom">
-            <Button.Effect>
-                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
-            </Button.Effect>
-            <TextBlock Text="OK" Foreground="#E1E1E1" RenderTransformOrigin="0.4,2.454">
-                <TextBlock.Effect>
-                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
-                </TextBlock.Effect>
-            </TextBlock>
-        </Button>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="0,0,0,8">
+                <!-- Calm Lands -->
+                <GroupBox x:Name="grpCalm" Header="Calm Lands (Publicity &amp; Marriage)" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85"
+                                   Text="Publicity campaigns for Open Air and Argent; Marriage points affect the marriage scene outcome."/>
+                        <UniformGrid Columns="2" Margin="0,2,0,2">
+                            <StackPanel Margin="0,0,8,0">
+                                <TextBlock Text="Open Air Credits"/>
+                                <TextBox x:Name="tbxOpenAirCredits" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Argent Credits"/>
+                                <TextBox x:Name="tbxArgentCredits" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,8,0">
+                                <TextBlock Text="Open Air Points"/>
+                                <TextBox x:Name="tbxOpenAirPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,0,0">
+                                <TextBlock Text="Argent Points"/>
+                                <TextBox x:Name="tbxArgentPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,8,0">
+                                <TextBlock Text="Marriage Points"/>
+                                <TextBox x:Name="tbxMarraigePoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,0,0">
+                                <TextBlock Text="Hover Rides"/>
+                                <TextBox x:Name="tbxHoverRides" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,8,0">
+                                <TextBlock Text="Chapter 5 Credits A"/>
+                                <TextBox x:Name="tbxCreditsCh5" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,0,0">
+                                <TextBlock Text="Chapter 5 Credits B"/>
+                                <TextBox x:Name="tbxCredits2Ch5" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+                <!-- Thunder Plains -->
+                <GroupBox x:Name="grpThunder" Header="Thunder Plains (Tower Calibration)" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85"
+                                   Text="Track calibration of 10 towers. Attempts is the number of tries; Calibrated marks the tower as complete."/>
+                        <UniformGrid Columns="3" Margin="0,2,0,4">
+                            <TextBlock FontWeight="Bold" Text="Tower"/>
+                            <TextBlock FontWeight="Bold" Text="Calibrated"/>
+                            <TextBlock FontWeight="Bold" Text="Attempts"/>
+                            <!-- Rows 1-10 -->
+                            <TextBlock Text="1"/>
+                            <CheckBox x:Name="chkT1" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT1A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="2"/>
+                            <CheckBox x:Name="chkT2" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT2A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="3"/>
+                            <CheckBox x:Name="chkT3" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT3A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="4"/>
+                            <CheckBox x:Name="chkT4" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT4A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="5"/>
+                            <CheckBox x:Name="chkT5" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT5A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="6"/>
+                            <CheckBox x:Name="chkT6" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT6A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="7"/>
+                            <CheckBox x:Name="chkT7" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT7A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="8"/>
+                            <CheckBox x:Name="chkT8" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT8A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="9"/>
+                            <CheckBox x:Name="chkT9" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT9A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBlock Text="10"/>
+                            <CheckBox x:Name="chkT10" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="tbxT10A" HorizontalContentAlignment="Center" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name="grpBikanel" Header="Bikanel Desert" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Excavation counters for Bikanel missions."/>
+                        <TextBlock Text="Successful Digs"/>
+                        <TextBox x:Name="tbxSuccessfulDigs" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        <TextBlock Text="Failed Digs"/>
+                        <TextBox x:Name="tbxFailedDigs" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name="grpBesaid" Header="Besaid (Gunner's Gauntlet)" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Score used in the Gunner's Gauntlet mini-game."/>
+                        <TextBlock Text="Gunner Points"/>
+                        <TextBox x:Name="tbxGunnerPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name="grpChocobo" Header="Chocobo Dungeon" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Success counters and greens inventory for the Chocobo Ranch."/>
+                        <TextBlock Text="Chocobo Successes (5 slots)"/>
+                        <UniformGrid Columns="5" Margin="0,4,0,4">
+                            <TextBox x:Name="tbxChoco1" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxChoco2" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxChoco3" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxChoco4" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxChoco5" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        </UniformGrid>
+                        <TextBlock Text="Greens (Pahsana, Mimett, Sylkis, Gysahl)"/>
+                        <UniformGrid Columns="4" Margin="0,4,0,4">
+                            <TextBox x:Name="tbxPahsana" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxMimett" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxSylkis" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                            <TextBox x:Name="tbxGysahl" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name="grpGagazet" Header="Mt. Gagazet" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Story counters related to Kimahri events at Mt. Gagazet."/>
+                        <TextBlock Text="Kimahri Self Esteem Ch2"/>
+                        <TextBox x:Name="tbxKimCh2" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        <TextBlock Text="Kimahri Self Esteem"/>
+                        <TextBox x:Name="tbxKim" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name="grpMisc" Header="Miscellaneous" Visibility="Collapsed" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Various global values that influence encounters and faction selection."/>
+                        <TextBlock Text="Faction (0=Neutral, 1=Youth League, 2=New Yevon)"/>
+                        <TextBox x:Name="tbxFaction" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        <TextBlock Text="Encounters"/>
+                        <TextBox x:Name="tbxEncounters" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        <TextBlock Text="O'aka Debt"/>
+                        <TextBox x:Name="tbxOakaDebt" PreviewTextInput="PreviewFloatHandler"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <Button x:Name="btnCancel" Style="{StaticResource Ffx2Button}" Click="btnCancel_Click" FontSize="18" FontWeight="Bold" Width="100" Height="34" Margin="0,0,8,0">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+                </Button.Effect>
+                <TextBlock Text="Cancel" Foreground="#E1E1E1">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Button>
+            <Button x:Name="btnOK" Style="{StaticResource Ffx2Button}" Click="btnOK_Click" FontSize="18" FontWeight="Bold" Width="100" Height="34">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+                </Button.Effect>
+                <TextBlock Text="OK" Foreground="#E1E1E1">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

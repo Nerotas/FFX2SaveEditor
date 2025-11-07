@@ -16,13 +16,16 @@ namespace FFX2SaveEditor
 
         public static byte[] BoolsToBytes(bool[] bools)
         {
-            var bytes = new byte[bools.Length / 8];
-            for (int b = 0; b < bytes.Length; b++)
+            if (bools == null) return Array.Empty<byte>();
+            int byteLen = (bools.Length + 7) / 8;
+            var bytes = new byte[byteLen];
+            for (int i = 0; i < bools.Length; i++)
             {
-                for (int bit = 0; bit < 8; bit++)
+                if (bools[i])
                 {
-                    if (bools[b + bit])
-                        bytes[b] &= (byte)Math.Pow(2, bit);
+                    int b = i / 8;
+                    int bit = i % 8;
+                    bytes[b] |= (byte)(1 << bit);
                 }
             }
             return bytes;

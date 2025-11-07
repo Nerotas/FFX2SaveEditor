@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
+using FFX2SaveEditor;
 
 namespace FFX2SaveEditor
 {
-    public abstract class Ffx2Save
+    public abstract partial class Ffx2Save
     {
         private MemoryStream ms;
         private BinaryReader br;
@@ -44,7 +46,9 @@ namespace FFX2SaveEditor
         public ushort[,] AssemblyParts { get; set; }
         public uint OpenAirPoints { get; set; }
         public uint ArgentPoints { get; set; }
-        public uint MarraigePoints { get; set; }
+    public uint MarraigePoints { get; set; }
+    // Backwards-compatible correct spelling alias
+    public uint MarriagePoints { get => MarraigePoints; set => MarraigePoints = value; }
         public uint SlCredits { get; set; }
         public byte Chapter { get; set; }
         public float OakaDept { get; set; }
@@ -60,7 +64,7 @@ namespace FFX2SaveEditor
         public byte[] AlBhedPrimers { get; set; }
 
         public short StoryFlagCount { get; set; }
-        public byte[] StoryFlagBytes { get; set; }        
+        public byte[] StoryFlagBytes { get; set; }
         public List<StoryFlag> MissingFlags = new List<StoryFlag>();
         public List<StoryFlag> Requisites = new List<StoryFlag>();
 
@@ -102,6 +106,10 @@ namespace FFX2SaveEditor
         {
             return ms.ToArray();
         }
+
+        // Expose key offsets for validators/consumers
+        protected int CrcOffset => crcOffset;
+        protected int StoryOffset => storyOffset;
 
         public virtual void ReadFile(MemoryStream stream)
         {
@@ -342,7 +350,14 @@ namespace FFX2SaveEditor
 
         public virtual void WriteCharLevel(byte index)
         {
-            bw.BaseStream.Seek(0x8204, SeekOrigin.Begin);
+            // Character blocks start at 0x8204 and are 0x80 bytes each.
+            // Within each block, Level is located after stats at offset +33 (0x21) from the block start.
+            const int baseOffset = 0x8204;
+            const int blockSize = 0x80; // 128 bytes per character block
+            const int levelOffsetWithinBlock = 33; // see ReadFile layout
+            if (index > 2) return; // only 3 characters (0..2)
+            long levelPos = baseOffset + (index * blockSize) + levelOffsetWithinBlock;
+            bw.BaseStream.Seek(levelPos, SeekOrigin.Begin);
             bw.Write(Characters[index].Level);
         }
 
@@ -473,6 +488,23 @@ namespace FFX2SaveEditor
             {
                 fw.Write(ms.ToArray());
             }
+
+            // Run validation after saving
+            try
+            {
+                var bytes = ms.ToArray();
+                var validation = SaveValidator.Validate(bytes, CrcOffset, StoryOffset);
+                // Hook for UI to observe validations if desired
+                OnSavedValidation?.Invoke(validation);
+                if (!validation.Passed)
+                {
+                    Debug.WriteLine(validation.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Validation error: {ex.Message}");
+            }
         }
 
         private void CalculateChecksum()
@@ -493,6 +525,101 @@ namespace FFX2SaveEditor
             bw.BaseStream.Seek(0x0C, SeekOrigin.Begin);
             bw.Write((byte)((525 - incomplete) / 5));
         }
+
+        public virtual void WriteAlBhedPrimers()
+        {
+            if (bw == null) return;
+            bw.BaseStream.Seek(0x8161, SeekOrigin.Begin);
+            bw.Write(AlBhedPrimers);
+            byte counted = (byte)CountSetBits(AlBhedPrimers);
+            AlBhedPrimerCount = counted;
+            AlBhedMaster = (byte)(counted ==26 ?1 :0);
+            bw.BaseStream.Seek(0x11a6, SeekOrigin.Begin);
+            bw.Write(AlBhedPrimerCount);
+            bw.Write(AlBhedMaster);
+        }
+
+        public virtual void WriteSinglePrimer(int index, bool learned)
+        {
+            if (index <0 || index >25) return;
+            int byteIndex = index /8;
+            int bit = index %8;
+            if (learned)
+                AlBhedPrimers[byteIndex] |= (byte)(1 << bit);
+            else
+                AlBhedPrimers[byteIndex] &= (byte)~(1 << bit);
+            WriteAlBhedPrimers();
+        }
+
+        public bool ValidateAlBhedPrimerConsistency()
+        {
+            return CountSetBits(AlBhedPrimers) == AlBhedPrimerCount;
+        }
+
+        private int CountSetBits(byte[] bytes)
+        {
+            int total =0;
+            foreach (var b in bytes)
+            {
+                byte v = b;
+                while (v !=0)
+                {
+                    v &= (byte)(v -1);
+                    total++;
+                }
+            }
+            return total;
+        }
+
+        public virtual void WriteMiniGames()
+        {
+            if (bw == null) return;
+            bw.BaseStream.Seek(0x2ec, SeekOrigin.Begin);
+            bw.Write(OpenAirCredits);
+            bw.Write(ArgentCredits);
+            bw.BaseStream.Seek(0x301, SeekOrigin.Begin);
+            bw.Write(TowerCalibrations);
+            bw.Write(TowerAttempts);
+            bw.BaseStream.Seek(0x340, SeekOrigin.Begin);
+            bw.Write(SuccessfulDigs);
+            bw.Write(FailedDigs);
+            bw.BaseStream.Seek(0x3b0, SeekOrigin.Begin);
+            bw.Write(GunnerPoints);
+            bw.BaseStream.Seek(0x4b4, SeekOrigin.Begin);
+            bw.Write(SlCredits5);
+            bw.BaseStream.Seek(0x4c1, SeekOrigin.Begin);
+            bw.Write(HoverRides);
+            bw.BaseStream.Seek(0x4c7, SeekOrigin.Begin);
+            bw.Write(ChocoboSuccesses);
+            bw.BaseStream.Seek(0xd0c, SeekOrigin.Begin);
+            bw.Write(PahsanaGreens);
+            bw.Write(MimettGreens);
+            bw.Write(SylkisGreens);
+            bw.Write(GysahlGreens);
+            bw.BaseStream.Seek(0xdb8, SeekOrigin.Begin);
+            bw.Write(KimahriSelfEsteemCh2);
+            bw.Write(KimahriSelfEsteem);
+            bw.BaseStream.Seek(0xde4, SeekOrigin.Begin);
+            bw.Write(OpenAirPoints);
+            bw.Write(ArgentPoints);
+            bw.Write(MarraigePoints);
+            bw.Write(SlCredits);
+            bw.BaseStream.Seek(0xc55, SeekOrigin.Begin);
+            bw.Write(Faction);
+        }
+
+        // Writes only the Calm Lands publicity and marriage block at 0xDE4
+        public void WritePublicity()
+        {
+            if (bw == null) return;
+            bw.BaseStream.Seek(0xDE4, SeekOrigin.Begin);
+            bw.Write(OpenAirPoints);
+            bw.Write(ArgentPoints);
+            bw.Write(MarraigePoints);
+            bw.Write(SlCredits);
+        }
+    // Consumers (UI) can subscribe to receive validation results after save.
+    public event Action<SaveValidationResult> OnSavedValidation;
     }
 
     public class Character

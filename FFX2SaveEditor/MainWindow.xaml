@@ -18,7 +18,7 @@
                         ScaleY="{Binding ElementName=ffx2MainWindow, Path=ScaleValue}" />
         </Grid.LayoutTransform>
         <Grid Name="TopNav">
-            <Button x:Name="btnLoad" HorizontalAlignment="Left" Margin="10,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnLoad_Click" Cursor="Hand" Style="{DynamicResource ButtonStyle1}">
+            <Button x:Name="btnLoad" HorizontalAlignment="Left" Margin="10,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnLoad_Click" Cursor="Hand" Style="{StaticResource Ffx2Button}">
                 <Button.Effect>
                     <DropShadowEffect ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
@@ -31,7 +31,7 @@
                     </TextBlock.Effect>
                 </TextBlock>
             </Button>
-            <Button x:Name="btnSave" HorizontalAlignment="Left" Margin="397,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnSave_Click" Cursor="Hand" Style="{DynamicResource ButtonStyle1}">
+            <Button x:Name="btnSave" HorizontalAlignment="Left" Margin="397,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnSave_Click" Cursor="Hand" Style="{StaticResource Ffx2Button}">
                 <Button.Effect>
                     <DropShadowEffect ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
@@ -44,7 +44,7 @@
                     </TextBlock.Effect>
                 </TextBlock>
             </Button>
-            <Button x:Name="btnConvertToPC" Visibility="Hidden" HorizontalAlignment="Left" Margin="782,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnConvert_Click" Cursor="Hand" Style="{DynamicResource ButtonStyle1}">
+            <Button x:Name="btnConvertToPC" Visibility="Hidden" HorizontalAlignment="Left" Margin="782,10,0,0" Width="360" FontWeight="Bold" FontSize="22" Foreground="#E1E1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="60" VerticalAlignment="Top" Click="btnConvert_Click" Cursor="Hand" Style="{StaticResource Ffx2Button}">
                 <Button.Effect>
                     <DropShadowEffect ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
@@ -62,7 +62,11 @@
                     <ImageBrush ImageSource="/FFX2SaveEditor;component/Resources/HelpBar.png"/>
                 </Label.Background>
             </Label>
-            <Label x:Name="lblHelp" Content="Load a Save." HorizontalAlignment="Left" Margin="216,90,0,0" VerticalAlignment="Top" Width="1648" Height="32" Foreground="#E1E1E1" FontSize="20" FontWeight="Bold"/>
+            <Label x:Name="lblHelp" Content="Load a Save." HorizontalAlignment="Left" Margin="216,90,0,0" VerticalAlignment="Top" Width="1200" Height="32" Foreground="#E1E1E1" FontSize="20" FontWeight="Bold"/>
+            <!-- Version Banner: shows loaded file + version; truncates long names with ellipsis -->
+            <Label x:Name="lblVersion" HorizontalAlignment="Right" Margin="0,90,20,0" VerticalAlignment="Top" Width="400" Height="32" Foreground="#E1E1E1" FontSize="16" FontWeight="Bold" HorizontalContentAlignment="Right">
+                <TextBlock x:Name="lblVersionText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" TextAlignment="Right"/>
+            </Label>
         </Grid>
         <Grid Name="MainPage" MouseWheel="MainPage_MouseWheel">
             <Grid Name="YunaPlate">
@@ -283,7 +287,7 @@
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mini-Games" Foreground="#373737">
+                <TextBlock x:Name="txtMiniGamesLabel" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mini-Games" Foreground="#373737">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
                     </TextBlock.Effect>
@@ -776,7 +780,7 @@
             </Button>
         </Grid>
         <Grid Name="DressPage" MouseWheel="MainPage_MouseWheel" KeyDown="MainPage_KeyDown">
-            <Image x:Name="dressHeader" HorizontalAlignment="Left" Height="33" Margin="166,304,0,0" VerticalAlignment="Top" Width="742" Source="Resources/DressphereHeader.png">
+            <Image x:Name="dressHeader" HorizontalAlignment="Left" Height="33" Margin="166,304,0,0" VerticalAlignment="Top" Width="742" Source="Resources/DresssphereHeader.png">
                 <Image.RenderTransform>
                     <TranslateTransform x:Name="transDressHeader" X="-1920" Y="0" />
                 </Image.RenderTransform>
@@ -1140,6 +1144,20 @@
                     <TranslateTransform x:Name="btnAllAbilitiesTrans" X="0" Y="4096" />
                 </Button.RenderTransform>
                 <TextBlock Text="Complete All" Foreground="#E1E1E1">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Button>
+            <!-- Visible in Abilities view when Gun Mage is selected -->
+            <Button Style="{StaticResource Ffx2Button}" x:Name="btnBlueBullets" HorizontalAlignment="Left" Margin="1373,246,0,0" VerticalAlignment="Top" Width="360" Height="60" FontWeight="Bold" FontSize="28" Foreground="Black" GotFocus="Button_GotFocus" MouseEnter="Button_MouseEnter" Click="btnBlueBullets_Click" Visibility="Hidden">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+                </Button.Effect>
+                <Button.RenderTransform>
+                    <TranslateTransform x:Name="btnBlueBulletsTrans" X="0" Y="4096" />
+                </Button.RenderTransform>
+                <TextBlock Text="Blue Bullets" Foreground="#E1E1E1">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
                     </TextBlock.Effect>

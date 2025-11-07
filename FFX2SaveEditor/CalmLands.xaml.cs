@@ -81,11 +81,15 @@ namespace FFX2SaveEditor
                 qty = 999999999;
 
             tbx.Text = qty.ToString();
+            // Keep leader status in sync when scrolling on points
+            if (tbx == tbxOpenAirPoints || tbx == tbxArgentPoints)
+                UpdateLeaderStatus();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            // Initialize leader label
+            UpdateLeaderStatus();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -107,6 +111,90 @@ namespace FFX2SaveEditor
                 oversized = textBox.Text.Length + e.Text.Length - textBox.SelectionLength > 9;
 
             e.Handled = oversized || Regex.IsMatch(e.Text, "[^0-9]+");
+        }
+
+        private uint ParseUint(TextBox tbx)
+        {
+            if (tbx == null) return 0;
+            if (uint.TryParse(tbx.Text, out var val)) return val;
+            return 0;
+        }
+
+        private void SetUint(TextBox tbx, uint value)
+        {
+            tbx.Text = value.ToString();
+        }
+
+        private void UpdateLeaderStatus()
+        {
+            if (txtLeaderStatus == null) return;
+            var openAir = ParseUint(tbxOpenAirPoints);
+            var argent = ParseUint(tbxArgentPoints);
+            if (openAir == argent)
+            {
+                txtLeaderStatus.Text = "Leader: Tie";
+            }
+            else if (openAir > argent)
+            {
+                txtLeaderStatus.Text = $"Leader: Open Air (+{openAir - argent})";
+            }
+            else
+            {
+                txtLeaderStatus.Text = $"Leader: Argent (+{argent - openAir})";
+            }
+        }
+
+        private void Points_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateLeaderStatus();
+        }
+
+        private void btnOpenAirWins_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxOpenAirPoints, uint.MaxValue);
+            SetUint(tbxArgentPoints, 0);
+            UpdateLeaderStatus();
+        }
+
+        private void btnArgentWins_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxOpenAirPoints, 0);
+            SetUint(tbxArgentPoints, uint.MaxValue);
+            UpdateLeaderStatus();
+        }
+
+        private void btnTie_Click(object sender, RoutedEventArgs e)
+        {
+            var openAir = ParseUint(tbxOpenAirPoints);
+            var argent = ParseUint(tbxArgentPoints);
+            var target = Math.Max(openAir, argent);
+            SetUint(tbxOpenAirPoints, target);
+            SetUint(tbxArgentPoints, target);
+            UpdateLeaderStatus();
+        }
+
+        private void btnMaxBoth_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxOpenAirPoints, uint.MaxValue);
+            SetUint(tbxArgentPoints, uint.MaxValue);
+            UpdateLeaderStatus();
+        }
+
+        private void btnZeroBoth_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxOpenAirPoints, 0);
+            SetUint(tbxArgentPoints, 0);
+            UpdateLeaderStatus();
+        }
+
+        private void btnMarriageMax_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxMarraigePoints, uint.MaxValue);
+        }
+
+        private void btnMarriageZero_Click(object sender, RoutedEventArgs e)
+        {
+            SetUint(tbxMarraigePoints, 0);
         }
     }
 }

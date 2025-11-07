@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFX2SaveEditor", "FFX2SaveEditor\FFX2SaveEditor.csproj", "{262493EB-4C8A-4E87-8597-A7788997C1C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFX2SaveEditor.Tests", "FFX2SaveEditor.Tests\FFX2SaveEditor.Tests.csproj", "{B0A1C6E0-0AC7-4C50-9F5F-2E51F2C8C123}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{262493EB-4C8A-4E87-8597-A7788997C1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{262493EB-4C8A-4E87-8597-A7788997C1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{262493EB-4C8A-4E87-8597-A7788997C1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A1C6E0-0AC7-4C50-9F5F-2E51F2C8C123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A1C6E0-0AC7-4C50-9F5F-2E51F2C8C123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A1C6E0-0AC7-4C50-9F5F-2E51F2C8C123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A1C6E0-0AC7-4C50-9F5F-2E51F2C8C123}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

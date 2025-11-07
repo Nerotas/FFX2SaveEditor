@@ -414,23 +414,23 @@ namespace FFX2SaveEditor
             new Ability((byte)PartyMember.All,(byte)Dressphere.GunMage,2,  30, 0x04AC, "Fiend Hunter Lv.2"),
             new Ability((byte)PartyMember.All,(byte)Dressphere.GunMage,2,  20, 0x04A4, "Scan Lv.2"),
             new Ability((byte)PartyMember.All,(byte)Dressphere.GunMage,2, 100, 0x04A6, "Scan Lv.3"),
-            //Blue bullet
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0060, "Fire Breath"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0062, "Seed Cannon"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0064, "Stone Breath"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0066, "Absorb"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0068, "White Wind"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x006A, "Bad Breath"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x006C, "Mighty Guard"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x006E, "Supernova"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0070, "Cry in the Night"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0072, "Drill Shot"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0074, "Mortar"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0076, "Annihilator"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x0078, "Heaven's Cataract"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x007A, "1000 Needles"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x007C, "Storm Cannon"),
-			//new Ability((byte)PartyMember.All,(byte)PartyMember.All,(byte)Dressphere.GunMage, 1, 0x007E, "Blaster"),
+            // Blue Bullet skills (Gun Mage)
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0060, "Fire Breath"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0062, "Seed Cannon"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0064, "Stone Breath"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0066, "Absorb"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0068, "White Wind"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x006A, "Bad Breath"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x006C, "Mighty Guard"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x006E, "Supernova"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0070, "Cry in the Night"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0072, "Drill Shot"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0074, "Mortar"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0076, "Annihilator"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x0078, "Heaven's Cataract"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x007A, "1000 Needles"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x007C, "Storm Cannon"),
+			new Ability((byte)PartyMember.All, (byte)Dressphere.GunMage,1,1,0x007E, "Blaster"),
 
 			new Ability((byte)PartyMember.All,(byte)Dressphere.Alchemist,0,   0, 0x0000, "Attack"),//auto
 			new Ability((byte)PartyMember.All,(byte)Dressphere.Alchemist,9,   0, 0x0000, "Mix"),//auto
@@ -658,7 +658,7 @@ namespace FFX2SaveEditor
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Silence Knife"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Sleep Knife"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Berserk Knife"),//auto
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Poison Knife"),//auto
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Mascot,8,   0, 0x0000, "Poison Knife"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Stone Knife"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Stop Knife"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Mascot,8,   0, 0x0000, "Quartet Knife"),//auto
@@ -683,10 +683,10 @@ namespace FFX2SaveEditor
             new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,6,  60, 0x03D8, "Flare Sandals"),
             new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,6, 100, 0x03DA, "Ultima Sandals"),
             new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,2,  30, 0x0496, "Piercing Magic"),
-            new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,2,  30, 0x0510, "Silenceproof"),
-            new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,2,  30, 0x0528, "Pointlessproof"),
-            new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,2,  30, 0x055E, "SOS Regen"),
-            new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Festivalist,2, 100, 0x05A6, "SOS Wall"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x0510, "Silenceproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x0528, "Pointlessproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x055E, "SOS Regen"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2, 100, 0x05A6, "SOS Wall"),
 
             new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,1,   0, 0x0000, "Attack"),//auto
             new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,5,  30, 0x01A2, "Twinkler"),
@@ -699,11 +699,11 @@ namespace FFX2SaveEditor
             new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,6,  30, 0x01BE, "Water Fish"),
             new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,6,  60, 0x01C0, "Gravity Fish"),
             new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,6, 100, 0x01C2, "Holy Fish"),
-            new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,2,  30, 0x030A, "Slowproof"),
-            new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,2,  40, 0x030E, "Stopproof"),
-            new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,2,  20, 0x0304, "Pointlessproof"),
-            new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,2,  30, 0x033A, "SOS Regen"),
-            new Ability((byte)PartyMember.Rikku,(byte)Dressphere.Festivalist,2, 100, 0x0382, "SOS Wall"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x030A, "Slowproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  40, 0x030E, "Stopproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  20, 0x0304, "Pointlessproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x033A, "SOS Regen"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2, 100, 0x0382, "SOS Wall"),
 
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,1,   0, 0x0000, "Attack"),//auto
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,5,  30, 0x01A4, "Twinkler"),
@@ -716,11 +716,11 @@ namespace FFX2SaveEditor
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,6,  30, 0x01C8, "Poison Mask"),
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,6,  60, 0x01CC, "Stop Mask"),
             new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,6,  80, 0x01CE, "Petro Mask"),
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,2,  30, 0x030A, "Slowproof"),
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,2,  40, 0x030E, "Stopproof"),
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,2,  50, 0x033C, "SOS Haste"),
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,2,  30, 0x033A, "SOS Regen"),
-            new Ability((byte)PartyMember.Paine,(byte)Dressphere.Festivalist,2, 100, 0x0382, "SOS Wall"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x030A, "Slowproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  40, 0x030E, "Stopproof"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  50, 0x033C, "SOS Haste"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2,  30, 0x033A, "SOS Regen"),
+            new Ability((byte)PartyMember.All,(byte)Dressphere.Festivalist,2, 100, 0x0382, "SOS Wall"),
 
             new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Psychic, 0,    0, 0x0000, "Attack"),//auto
             new Ability((byte)PartyMember.Yuna,(byte)Dressphere.Psychic, 6,    0, 0x0000, "Psychic Bomb"),//auto
@@ -835,11 +835,11 @@ namespace FFX2SaveEditor
 			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,6,  20, 0x023C, "Shockwave"),
 			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,6,  20, 0x023E, "Shockstorm"),
 			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,6,  30, 0x0242, "Vajra"),
-			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,2,   0, 0x0000, "Ribbon"),//auto
-			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,2,  20, 0x0554, "Double HP"),
-			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,2,  30, 0x0556, "Triple HP"),
-			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,2,  20, 0x0486, "Break HP Limit"),
-			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.MachinaMaw,2,  20, 0x048A, "Break Dmg. Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.MachinaMaw,2,   0, 0x0000, "Ribbon"),//auto
+			new Ability((byte)PartyMember.All,(byte)Dressphere.MachinaMaw,2,  20, 0x0554, "Double HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.MachinaMaw,2,  30, 0x0556, "Triple HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.MachinaMaw,2,  20, 0x0486, "Break HP Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.MachinaMaw,2,  20, 0x048A, "Break Dmg. Limit"),
 
 			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.SmasherR,6,   0, 0x0000, "Howitzer"),//auto
 			new Ability((byte)PartyMember.Rikku,(byte)Dressphere.SmasherR,6,  10, 0x1CCC, "Sleep Shell"),
@@ -882,15 +882,15 @@ namespace FFX2SaveEditor
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,   0, 0x0000, "Whelmen"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,   0, 0x0000, "Levin"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,  10, 0x0278, "Wisenen"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,  20, 0x027A, "Fiers"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,  20, 0x027C, "Deeth"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,1,  20, 0x027E, "Assoil"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,1,  20, 0x027A, "Fiers"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,1,  20, 0x027C, "Deeth"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,1,  20, 0x027E, "Assoil"),
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,8,  30, 0x0282, "Sword Dance"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,2,   0, 0x0000, "Ribbon"),//auto
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,2,  20, 0x0554, "Double HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,2,  30, 0x0556, "Triple HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,2,  20, 0x0486, "Break HP Limit"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.FullThrottle,2,  20, 0x048A, "Break Dmg. Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,2,   0, 0x0000, "Ribbon"),//auto
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,2,  20, 0x0554, "Double HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,2,  30, 0x0556, "Triple HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,2,  20, 0x0486, "Break HP Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.FullThrottle,2,  20, 0x048A, "Break Dmg. Limit"),
 
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,7,   0, 0x0000, "Venom Wing"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,7,   0, 0x0000, "Blind Wing"),//auto
@@ -903,11 +903,11 @@ namespace FFX2SaveEditor
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,5,   0, 0x0000, "Stamina"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,5,   0, 0x0000, "Mettle"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,5,  10, 0x23B8, "Reboot"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,2,   0, 0x0000, "Ribbon"),//auto
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,2,  20, 0x2674, "Double HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,2,  30, 0x2676, "Triple HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,2,  20, 0x25A6, "Break HP Limit"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.DextralWing,2,  20, 0x25AA, "Break Dmg. Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.DextralWing,2,   0, 0x0000, "Ribbon"),//auto
+			new Ability((byte)PartyMember.All,(byte)Dressphere.DextralWing,2,  20, 0x2674, "Double HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.DextralWing,2,  30, 0x2676, "Triple HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.DextralWing,2,  20, 0x25A6, "Break HP Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.DextralWing,2,  20, 0x25AA, "Break Dmg. Limit"),
 
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,10,  0, 0x0000, "Steel Feather"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,10,  0, 0x0000, "Diamond Feather"),//auto
@@ -920,11 +920,11 @@ namespace FFX2SaveEditor
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,5,   0, 0x0000, "Stamina"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,5,   0, 0x0000, "Mettle"),//auto
 			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,5,  10, 0x2A6E, "Reboot"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,2,   0, 0x0000, "Ribbon"),//auto
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,2,  20, 0x2D14, "Double HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,2,  30, 0x2D16, "Triple HP"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,2,  20, 0x2C46, "Break HP Limit"),
-			new Ability((byte)PartyMember.Paine,(byte)Dressphere.SinistralWing,2,  20, 0x2C4A, "Break Dmg. Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.SinistralWing,2,   0, 0x0000, "Ribbon"),//auto
+			new Ability((byte)PartyMember.All,(byte)Dressphere.SinistralWing,2,  20, 0x2D14, "Double HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.SinistralWing,2,  30, 0x2D16, "Triple HP"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.SinistralWing,2,  20, 0x2C46, "Break HP Limit"),
+			new Ability((byte)PartyMember.All,(byte)Dressphere.SinistralWing,2,  20, 0x2C4A, "Break Dmg. Limit"),
         };
 
         public static Uri[] AbilityIcons =

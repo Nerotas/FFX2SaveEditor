@@ -28,6 +28,8 @@ namespace FFX2SaveEditor
         public MainWindow()
         {
             InitializeComponent();
+            // Initialize version banner
+            UpdateVersionBanner();
         }
 
         Ffx2Save save;
@@ -38,7 +40,7 @@ namespace FFX2SaveEditor
         int scroll = 0;
 
         #region Scaling
-        public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.Register("ScaleValue", typeof(double), typeof(MainWindow), 
+        public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.Register("ScaleValue", typeof(double), typeof(MainWindow),
             new UIPropertyMetadata(1.0, new PropertyChangedCallback(OnScaleValueChanged), new CoerceValueCallback(OnCoerceScaleValue)));
 
         private static object OnCoerceScaleValue(DependencyObject o, object value)
@@ -87,6 +89,56 @@ namespace FFX2SaveEditor
             ScaleValue = (double)OnCoerceScaleValue(ffx2MainWindow, value);
         }
         #endregion
+
+        private void UpdateVersionBanner()
+        {
+            try
+            {
+                var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                var versionText = $"Version {ver.Major}.{ver.Minor}.{ver.Build}";
+                string fileText;
+                string tooltipText = null;
+
+                if (save == null)
+                {
+                    fileText = "No file loaded";
+                }
+                else if (save is Saves.PcSave pc)
+                {
+                    fileText = pc.OriginalName;
+                    tooltipText = $"PC Save: {pc.OriginalName}";
+                }
+                else if (save is Saves.Ps3Save ps3)
+                {
+                    try
+                    {
+                        var folder = System.IO.Path.GetFileName(ps3.Directory?.TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar));
+                        fileText = string.IsNullOrEmpty(folder) ? "PS3 Save" : $"PS3: {folder}";
+                    }
+                    catch { fileText = "PS3 Save"; }
+                    try
+                    {
+                        var folder = System.IO.Path.GetFileName(ps3.Directory?.TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar));
+                        tooltipText = string.IsNullOrEmpty(folder) ? "PS3 Save" : folder;
+                    }
+                    catch { tooltipText = "PS3 Save"; }
+                }
+                else
+                {
+                    fileText = "Save Loaded";
+                }
+
+                var banner = $"{fileText} — {versionText}";
+                if (lblVersionText != null)
+                    lblVersionText.Text = banner;
+                else if (lblVersion != null)
+                    lblVersion.Content = banner;
+
+                if (lblVersion != null && !string.IsNullOrEmpty(tooltipText))
+                    lblVersion.ToolTip = tooltipText;
+            }
+            catch { }
+        }
 
         #region WPF Stuff
         private void SetLightSource(FrameworkElement sender, FrameworkElement target)
@@ -288,6 +340,8 @@ namespace FFX2SaveEditor
             {
                 da.To = 8192;
                 btnAllAbilitiesTrans.BeginAnimation(TranslateTransform.YProperty, da);
+                // Ensure Blue Bullets button also animates out if present
+                btnBlueBulletsTrans.BeginAnimation(TranslateTransform.YProperty, da);
                 da.To = -1920;
             }
             ClearGarmDressScreen(da, ts);
@@ -299,6 +353,10 @@ namespace FFX2SaveEditor
             DoubleAnimation da = new DoubleAnimation(8192, TimeSpan.FromSeconds(0.25));
 
             ClearItemAccScreen(da, ts);
+
+            // Animate out ability action buttons
+            btnAllAbilitiesTrans.BeginAnimation(TranslateTransform.YProperty, da);
+            btnBlueBulletsTrans.BeginAnimation(TranslateTransform.YProperty, da);
         }
 
         private void ClearAccessoryScreen()
@@ -478,7 +536,7 @@ namespace FFX2SaveEditor
             btnMiniGames.Visibility = Visibility.Hidden;
             btnSidequests.Visibility = Visibility.Hidden;
             btnConfig.Visibility = Visibility.Hidden;
-           
+
             switch (menuScreen)
             {
                 case MenuScreen.Items:
@@ -574,6 +632,17 @@ namespace FFX2SaveEditor
             dar.BeginTime += TimeSpan.FromMilliseconds(18);
             dar.Completed += MainMenuLoaded;
             transGilTime.BeginAnimation(TranslateTransform.XProperty, dar);
+
+            // Ensure mini-games label reflects closed state on main screen
+            try
+            {
+                if (txtMiniGamesLabel != null)
+                {
+                    txtMiniGamesLabel.Text = "Mini-Games";
+                    txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                }
+            }
+            catch { }
         }
 
         private void MainMenuLoaded(object sender, EventArgs e)
@@ -655,7 +724,7 @@ namespace FFX2SaveEditor
         }
 
         private void UpdateItemScreen()
-        { 
+        {
             txtItem1.Text = Globals.Items[save.Items[0+scroll,0]];
             txtItemQty1.Text = save.Items[0+scroll, 1].ToString();
             txtItem2.Text = Globals.Items[save.Items[1+scroll, 0]];
@@ -926,7 +995,7 @@ namespace FFX2SaveEditor
         private void DisplayGarmDressScreen(DoubleAnimation da, TimeSpan ts)
         {
             scroll = 0;
-            
+
             transDressHeader.BeginAnimation(TranslateTransform.XProperty, da);
             da.BeginTime += ts;
             transDress1.BeginAnimation(TranslateTransform.XProperty, da);
@@ -980,7 +1049,7 @@ namespace FFX2SaveEditor
             txtItemQty14.Background = null;
             txtItemQty15.Background = null;
             txtItemQty16.Background = null;
-            
+
             txtItem1.Text = Globals.Accessories[save.Accessories[0+scroll, 0]];
             txtItemQty1.Text = save.Accessories[0+scroll, 1].ToString();
             txtItem2.Text = Globals.Accessories[save.Accessories[1+scroll, 0]];
@@ -1066,11 +1135,14 @@ namespace FFX2SaveEditor
             btnAbilities.IsEnabled = true;
             TimeSpan ts = new TimeSpan(0, 0, 0, 0, 25);
             DoubleAnimation da = new DoubleAnimation(171, TimeSpan.FromSeconds(0.25));
-            
+
             btnAllAbilitiesTrans.BeginAnimation(TranslateTransform.YProperty, da);
             DisplayItemAccScreen(da, ts);
 
             UpdateAbilitiesScreen();
+
+            // Show Blue Bullets action only for Gun Mage
+            SetupBlueBulletsButton();
         }
 
         private void UpdateAbilitiesScreen()
@@ -1154,6 +1226,49 @@ namespace FFX2SaveEditor
             //myTextBox.Background = textImageBrush;
 
             //UpdateAbilityColors();
+
+            // Keep Blue Bullets button visibility in sync when switching dresspheres
+            SetupBlueBulletsButton();
+        }
+
+        private void SetupBlueBulletsButton()
+        {
+            // Only visible when editing abilities and Gun Mage is selected
+            if (menuScreen == MenuScreen.Abilities && currentDress == Dressphere.GunMage)
+            {
+                btnBlueBullets.Visibility = Visibility.Visible;
+                var daShow = new DoubleAnimation(171, TimeSpan.FromSeconds(0.25));
+                btnBlueBulletsTrans.BeginAnimation(TranslateTransform.YProperty, daShow);
+            }
+            else
+            {
+                var daHide = new DoubleAnimation(8192, TimeSpan.FromSeconds(0.25));
+                btnBlueBulletsTrans.BeginAnimation(TranslateTransform.YProperty, daHide);
+                btnBlueBullets.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void btnBlueBullets_Click(object sender, RoutedEventArgs e)
+        {
+            // Filter the character's abilities to only the Gun Mage Blue Bullets (offset range 0x0060..0x007E)
+            var blueBulletList = save.Characters[(byte)currentChar]
+                .Abilities
+                .Where(a => a.Dressphere == (byte)Dressphere.GunMage && a.Offset >= 0x0060 && a.Offset <= 0x007E)
+                .ToList();
+
+            if (blueBulletList.Count == 0)
+                return;
+
+            var dialog = new BlueBullets(blueBulletList);
+            if (dialog.ShowDialog() == true)
+            {
+                foreach (var ability in blueBulletList)
+                {
+                    // Persist the AP changes (mastered/unmastered) made in the dialog
+                    save.WriteAbility((byte)currentChar, ability);
+                }
+                UpdateAbilitiesScreen();
+            }
         }
 
         private ImageSource GetAccIcon(int index)
@@ -1376,7 +1491,7 @@ namespace FFX2SaveEditor
             txtDress5.Text = "Chocobo Dungeon";
             txtDress6.Text = "Mt. Gagazet";
             txtDress7.Text = "Miscellaneous";
-            txtDress8.Text = "";
+            txtDress8.Text = "All Mini-Games (Advanced)";
             txtDress9.Text = "";
             txtDress10.Text = "";
             txtDress11.Text = "";
@@ -1402,10 +1517,22 @@ namespace FFX2SaveEditor
             TimeSpan ts = new TimeSpan(0, 0, 0, 0, 25);
             DoubleAnimation da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.25));
             da.Completed += ResetScrollBar;
-            
+
             DisplayGarmDressScreen(da, ts);
 
             UpdateMiniGameSelectScreen();
+
+            // Show clear status that mini-games menu is open
+            try
+            {
+                lblHelp.Content = "Mini-Games menu open. Select a location to edit.";
+                if (txtMiniGamesLabel != null)
+                {
+                    txtMiniGamesLabel.Text = "Mini-Games (Open)";
+                    txtMiniGamesLabel.Foreground = Globals.WhiteBrush;
+                }
+            }
+            catch { }
         }
 
         private void DisplaySidequestScreen()
@@ -1673,28 +1800,41 @@ namespace FFX2SaveEditor
 
         private void btnMiniGames_Click(object sender, RoutedEventArgs e)
         {
-            /*
+            // Enable mini-game selection navigation
             switch (menuScreen)
             {
                 case MenuScreen.MiniGameSelect:
+                    // Closing the mini-games menu; restore label and help text
+                    try
+                    {
+                        if (txtMiniGamesLabel != null)
+                        {
+                            txtMiniGamesLabel.Text = "Mini-Games";
+                            txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                        }
+                        lblHelp.Content = "Back to main menu.";
+                    }
+                    catch { }
                     SwitchToScreen(MenuScreen.Main);
                     break;
                 case MenuScreen.Main:
                 case MenuScreen.MiniGames:
                     SwitchToScreen(MenuScreen.MiniGameSelect);
                     break;
+                default:
+                    // From any other screen jump back to main then open selector
+                    SwitchToScreen(MenuScreen.Main);
+                    SwitchToScreen(MenuScreen.MiniGameSelect);
+                    break;
             }
-            */
         }
 
         private void btnSidequests_Click(object sender, RoutedEventArgs e)
         {
-            /*
             if (menuScreen == MenuScreen.Sidequests)
                 SwitchToScreen(MenuScreen.Main);
             else
                 SwitchToScreen(MenuScreen.Sidequests);
-            */
         }
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
@@ -1743,7 +1883,7 @@ namespace FFX2SaveEditor
         }
 
         private void EditOneItem(Grid sender)
-        { 
+        {
             var dialog = new ItemSelect(MenuType.Items);
             var icon = ((Image)((sender).Children[0]));
             var item = ((TextBlock)((sender).Children[1]));
@@ -1852,6 +1992,24 @@ namespace FFX2SaveEditor
                 case 1:
                     EditThunderPlainsMiniGames();
                     break;
+                case 2:
+                    EditBikanelMiniGames();
+                    break;
+                case 3:
+                    EditBesaidMiniGames();
+                    break;
+                case 4:
+                    EditChocoboMiniGames();
+                    break;
+                case 5:
+                    EditGagazetMiniGames();
+                    break;
+                case 6:
+                    EditMiscMiniGames();
+                    break;
+                case 7:
+                    EditAllMiniGamesAdvanced();
+                    break;
             }
         }
 
@@ -1876,6 +2034,8 @@ namespace FFX2SaveEditor
                 save.MarraigePoints = form.MarraigePoints;
                 save.SlCredits = form.CreditsCh5;
                 save.SlCredits5 = form.Credits2Ch5;
+                // Apply publicity/marriage to the in-memory save immediately
+                save.WritePublicity();
             }
         }
 
@@ -1916,15 +2076,193 @@ namespace FFX2SaveEditor
                 save.TowerCalibrations[8] = form.Tower9Calibrated;
                 save.TowerCalibrations[9] = form.Tower10Calibrated;
                 save.TowerAttempts[0] = form.Tower1Attempts;
-                save.TowerAttempts[1] = form.Tower1Attempts;
-                save.TowerAttempts[2] = form.Tower1Attempts;
-                save.TowerAttempts[3] = form.Tower1Attempts;
-                save.TowerAttempts[4] = form.Tower1Attempts;
-                save.TowerAttempts[5] = form.Tower1Attempts;
-                save.TowerAttempts[6] = form.Tower1Attempts;
-                save.TowerAttempts[7] = form.Tower1Attempts;
-                save.TowerAttempts[8] = form.Tower1Attempts;
-                save.TowerAttempts[9] = form.Tower1Attempts;
+                save.TowerAttempts[1] = form.Tower2Attempts;
+                save.TowerAttempts[2] = form.Tower3Attempts;
+                save.TowerAttempts[3] = form.Tower4Attempts;
+                save.TowerAttempts[4] = form.Tower5Attempts;
+                save.TowerAttempts[5] = form.Tower6Attempts;
+                save.TowerAttempts[6] = form.Tower7Attempts;
+                save.TowerAttempts[7] = form.Tower8Attempts;
+                save.TowerAttempts[8] = form.Tower9Attempts;
+                save.TowerAttempts[9] = form.Tower10Attempts;
+            }
+        }
+
+        private void EditBikanelMiniGames()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.Bikanel };
+            form.SuccessfulDigs = save.SuccessfulDigs;
+            form.FailedDigs = save.FailedDigs;
+            if (form.ShowDialog() == true)
+            {
+                save.SuccessfulDigs = form.SuccessfulDigs;
+                save.FailedDigs = form.FailedDigs;
+                save.WriteMiniGames();
+            }
+        }
+
+        private void EditBesaidMiniGames()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.Besaid };
+            form.GunnerPoints = save.GunnerPoints;
+            if (form.ShowDialog() == true)
+            {
+                save.GunnerPoints = form.GunnerPoints;
+                save.WriteMiniGames();
+            }
+        }
+
+        private void EditChocoboMiniGames()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.Chocobo };
+            form.ChocoboSuccesses = save.ChocoboSuccesses;
+            form.PahsanaGreens = save.PahsanaGreens;
+            form.MimettGreens = save.MimettGreens;
+            form.SylkisGreens = save.SylkisGreens;
+            form.GysahlGreens = save.GysahlGreens;
+            if (form.ShowDialog() == true)
+            {
+                save.ChocoboSuccesses = form.ChocoboSuccesses;
+                save.PahsanaGreens = form.PahsanaGreens;
+                save.MimettGreens = form.MimettGreens;
+                save.SylkisGreens = form.SylkisGreens;
+                save.GysahlGreens = form.GysahlGreens;
+                save.WriteMiniGames();
+            }
+        }
+
+        private void EditGagazetMiniGames()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.Gagazet };
+            form.KimahriSelfEsteemCh2 = save.KimahriSelfEsteemCh2;
+            form.KimahriSelfEsteem = save.KimahriSelfEsteem;
+            if (form.ShowDialog() == true)
+            {
+                save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
+                save.KimahriSelfEsteem = form.KimahriSelfEsteem;
+                save.WriteMiniGames();
+            }
+        }
+
+        private void EditMiscMiniGames()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.Misc };
+            form.Faction = save.Faction;
+            form.Encounters = save.Encounters;
+            form.OakaDebt = save.OakaDept;
+            if (form.ShowDialog() == true)
+            {
+                save.Faction = form.Faction;
+                save.Encounters = form.Encounters;
+                save.OakaDept = form.OakaDebt;
+                save.WriteMiniGames();
+            }
+        }
+
+        private void EditAllMiniGamesAdvanced()
+        {
+            var form = new MiniGame { Mode = MiniGameMode.All };
+            // Calm Lands
+            form.OpenAirCredits = save.OpenAirCredits;
+            form.OpenAirPoints = save.OpenAirPoints;
+            form.ArgentCredits = save.ArgentCredits;
+            form.ArgentPoints = save.ArgentPoints;
+            form.MarraigePoints = save.MarraigePoints;
+            form.CreditsCh5 = save.SlCredits;
+            form.Credits2Ch5 = save.SlCredits5;
+            form.HoverRides = save.HoverRides;
+            // Thunder Plains
+            form.Tower1Calibrated = save.TowerCalibrations[0];
+            form.Tower2Calibrated = save.TowerCalibrations[1];
+            form.Tower3Calibrated = save.TowerCalibrations[2];
+            form.Tower4Calibrated = save.TowerCalibrations[3];
+            form.Tower5Calibrated = save.TowerCalibrations[4];
+            form.Tower6Calibrated = save.TowerCalibrations[5];
+            form.Tower7Calibrated = save.TowerCalibrations[6];
+            form.Tower8Calibrated = save.TowerCalibrations[7];
+            form.Tower9Calibrated = save.TowerCalibrations[8];
+            form.Tower10Calibrated = save.TowerCalibrations[9];
+            form.Tower1Attempts = save.TowerAttempts[0];
+            form.Tower2Attempts = save.TowerAttempts[1];
+            form.Tower3Attempts = save.TowerAttempts[2];
+            form.Tower4Attempts = save.TowerAttempts[3];
+            form.Tower5Attempts = save.TowerAttempts[4];
+            form.Tower6Attempts = save.TowerAttempts[5];
+            form.Tower7Attempts = save.TowerAttempts[6];
+            form.Tower8Attempts = save.TowerAttempts[7];
+            form.Tower9Attempts = save.TowerAttempts[8];
+            form.Tower10Attempts = save.TowerAttempts[9];
+            // Bikanel
+            form.SuccessfulDigs = save.SuccessfulDigs;
+            form.FailedDigs = save.FailedDigs;
+            // Besaid
+            form.GunnerPoints = save.GunnerPoints;
+            // Chocobo
+            form.ChocoboSuccesses = save.ChocoboSuccesses;
+            form.PahsanaGreens = save.PahsanaGreens;
+            form.MimettGreens = save.MimettGreens;
+            form.SylkisGreens = save.SylkisGreens;
+            form.GysahlGreens = save.GysahlGreens;
+            // Gagazet
+            form.KimahriSelfEsteemCh2 = save.KimahriSelfEsteemCh2;
+            form.KimahriSelfEsteem = save.KimahriSelfEsteem;
+            // Misc
+            form.Faction = save.Faction;
+            form.Encounters = save.Encounters;
+            form.OakaDebt = save.OakaDept;
+
+            if (form.ShowDialog() == true)
+            {
+                // Calm Lands
+                save.OpenAirCredits = form.OpenAirCredits;
+                save.OpenAirPoints = form.OpenAirPoints;
+                save.ArgentCredits = form.ArgentCredits;
+                save.ArgentPoints = form.ArgentPoints;
+                save.MarraigePoints = form.MarraigePoints;
+                save.SlCredits = form.CreditsCh5;
+                save.SlCredits5 = form.Credits2Ch5;
+                save.HoverRides = form.HoverRides;
+                // Thunder
+                save.TowerCalibrations[0] = form.Tower1Calibrated;
+                save.TowerCalibrations[1] = form.Tower2Calibrated;
+                save.TowerCalibrations[2] = form.Tower3Calibrated;
+                save.TowerCalibrations[3] = form.Tower4Calibrated;
+                save.TowerCalibrations[4] = form.Tower5Calibrated;
+                save.TowerCalibrations[5] = form.Tower6Calibrated;
+                save.TowerCalibrations[6] = form.Tower7Calibrated;
+                save.TowerCalibrations[7] = form.Tower8Calibrated;
+                save.TowerCalibrations[8] = form.Tower9Calibrated;
+                save.TowerCalibrations[9] = form.Tower10Calibrated;
+                save.TowerAttempts[0] = form.Tower1Attempts;
+                save.TowerAttempts[1] = form.Tower2Attempts;
+                save.TowerAttempts[2] = form.Tower3Attempts;
+                save.TowerAttempts[3] = form.Tower4Attempts;
+                save.TowerAttempts[4] = form.Tower5Attempts;
+                save.TowerAttempts[5] = form.Tower6Attempts;
+                save.TowerAttempts[6] = form.Tower7Attempts;
+                save.TowerAttempts[7] = form.Tower8Attempts;
+                save.TowerAttempts[8] = form.Tower9Attempts;
+                save.TowerAttempts[9] = form.Tower10Attempts;
+                // Bikanel
+                save.SuccessfulDigs = form.SuccessfulDigs;
+                save.FailedDigs = form.FailedDigs;
+                // Besaid
+                save.GunnerPoints = form.GunnerPoints;
+                // Chocobo
+                save.ChocoboSuccesses = form.ChocoboSuccesses;
+                save.PahsanaGreens = form.PahsanaGreens;
+                save.MimettGreens = form.MimettGreens;
+                save.SylkisGreens = form.SylkisGreens;
+                save.GysahlGreens = form.GysahlGreens;
+                // Gagazet
+                save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
+                save.KimahriSelfEsteem = form.KimahriSelfEsteem;
+                // Misc
+                save.Faction = form.Faction;
+                save.Encounters = form.Encounters;
+                save.OakaDept = form.OakaDebt;
+
+                save.WriteMiniGames();
             }
         }
 
@@ -2089,7 +2427,7 @@ namespace FFX2SaveEditor
                 new TreeViewItem() { Header = "Chapter 2", Tag="Chapter", FontSize=28},
                 new TreeViewItem() { Header = "Chapter 3", Tag="Chapter", FontSize=28},
                 new TreeViewItem() { Header = "Chapter 4", Tag="Chapter", FontSize=28},
-                new TreeViewItem() { Header = "Chapter 5", Tag="Chapter", FontSize=28} 
+                new TreeViewItem() { Header = "Chapter 5", Tag="Chapter", FontSize=28}
             };
 
             foreach(var flag in GameInfo.Flags)
@@ -2226,6 +2564,7 @@ namespace FFX2SaveEditor
                 btnConvertToPC.Visibility = Visibility.Hidden;
             }
 
+            UpdateVersionBanner();
             UpdateMainDisplay();
         }
 

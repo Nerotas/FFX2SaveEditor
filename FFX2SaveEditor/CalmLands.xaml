@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFX2SaveEditor"
         mc:Ignorable="d"
-        Title="CalmLands" Height="341.95" Width="404.873"
+    Title="CalmLands" Height="460" Width="404.873"
         ResizeMode="NoResize"
         Icon="Resources/tonberry.gif"
         Loaded="Window_Loaded">
@@ -55,12 +55,12 @@
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
             </Label.Effect>
         </Label>
-        <TextBox x:Name="tbxOpenAirPoints" Text="999999999" HorizontalAlignment="Left" Margin="111,104,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel">
+        <TextBox x:Name="tbxOpenAirPoints" Text="999999999" HorizontalAlignment="Left" Margin="111,104,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
             <TextBox.Effect>
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="10" Opacity="0.5"/>
             </TextBox.Effect>
         </TextBox>
-        <TextBox x:Name="tbxArgentPoints" HorizontalAlignment="Left" Height="28" Margin="266,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel">
+        <TextBox x:Name="tbxArgentPoints" HorizontalAlignment="Left" Height="28" Margin="266,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
             <TextBox.Effect>
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="10" Opacity="0.5"/>
             </TextBox.Effect>
@@ -105,5 +105,82 @@
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
             </Label.Effect>
         </Label>
+        <!-- Leader/tie status for publicity points -->
+        <TextBlock x:Name="txtLeaderStatus" HorizontalAlignment="Left" Margin="19,235,0,0" VerticalAlignment="Top" Foreground="#CFCFCF" FontSize="14"/>
+
+        <!-- Publicity quick actions -->
+        <Button x:Name="btnOpenAirWins" Style="{StaticResource Ffx2Button}" Margin="10,260,0,0" Click="btnOpenAirWins_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Open Air Wins" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+        <Button x:Name="btnArgentWins" Style="{StaticResource Ffx2Button}" Margin="140,260,0,0" Click="btnArgentWins_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Argent Wins" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+        <Button x:Name="btnTie" Style="{StaticResource Ffx2Button}" Margin="270,260,0,0" Click="btnTie_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Tie (Equalize)" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+
+        <Button x:Name="btnMaxBoth" Style="{StaticResource Ffx2Button}" Margin="10,295,0,0" Click="btnMaxBoth_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Max Both" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+        <Button x:Name="btnZeroBoth" Style="{StaticResource Ffx2Button}" Margin="140,295,0,0" Click="btnZeroBoth_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Zero Both" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+
+        <!-- Matchmaking quick actions (next to the Marraige Points field) -->
+        <Button x:Name="btnMarriageMax" Style="{StaticResource Ffx2Button}" Margin="331,185,0,0" Click="btnMarriageMax_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="60" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Max" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
+        <Button x:Name="btnMarriageZero" Style="{StaticResource Ffx2Button}" Margin="331,217,0,0" Click="btnMarriageZero_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="60" Height="28" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
+            </Button.Effect>
+            <TextBlock Text="Zero" Foreground="#E1E1E1">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Button>
     </Grid>
 </Window>

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FFX2SaveEditor</RootNamespace>
     <AssemblyName>FFX2SaveEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Validation\SaveValidator.cs" />
+    <Compile Include="BlueBullets.xaml.cs">
+      <DependentUpon>BlueBullets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PS3FileSystem\Delegates.cs" />
     <Compile Include="PS3FileSystem\Functions.cs" />
     <Compile Include="PS3FileSystem\Param_PFD.cs" />
@@ -84,6 +88,9 @@
     <Compile Include="Saves\Ps2Save.cs" />
     <Compile Include="Saves\Ps3Save.cs" />
     <Compile Include="Utils.cs" />
+    <Page Include="BlueBullets.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThunderPlains.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -225,7 +232,12 @@
     <Resource Include="Resources\whitemage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- Auto version increment before build -->
+  <Target Name="AutoIncrementVersion" BeforeTargets="BeforeBuild">
+    <Message Text="Incrementing Assembly Version..." Importance="high" />
+    <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -File &quot;$(ProjectDir)BuildTools\IncrementVersion.ps1&quot; -Part revision" ContinueOnError="false" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
