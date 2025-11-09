@@ -241,7 +241,7 @@ namespace FFX2SaveEditor
                     if (txtMiniGamesLabel != null)
                     {
                         txtMiniGamesLabel.Text = "Mini-Games";
-                        txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                        txtMiniGamesLabel.Foreground = Globals.WhiteBrush;
                     }
                 }
                 catch { /* non-fatal UI reset */ }
@@ -657,7 +657,7 @@ namespace FFX2SaveEditor
                 if (txtMiniGamesLabel != null)
                 {
                     txtMiniGamesLabel.Text = "Mini-Games";
-                    txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                    txtMiniGamesLabel.Foreground = Globals.WhiteBrush;
                 }
             }
             catch { }
@@ -1839,7 +1839,7 @@ namespace FFX2SaveEditor
                         if (txtMiniGamesLabel != null)
                         {
                             txtMiniGamesLabel.Text = "Mini-Games";
-                            txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                            txtMiniGamesLabel.Foreground = Globals.WhiteBrush;
                         }
                         lblHelp.Content = "Back to main menu.";
                     }

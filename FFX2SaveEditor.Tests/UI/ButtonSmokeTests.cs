@@ -43,9 +43,9 @@ namespace FFX2SaveEditor.Tests.UI
                 string[] buttonNames = new[]
                 {
                     "btnLoad","btnSave","btnConvertToPC",
-                    "btnItems","btnStoryCompletion","btnEquip","btnGarmentGrid",
+                    "btnItems","btnStoryCompletion","btnGarmentGrid",
                     "btnAccessories","btnAbilities","btnDresspheres",
-                    "btnMiniGames","btnSidequests","btnConfig"
+                    "btnMiniGames","btnConfig"
                 };
 
                 foreach (var name in buttonNames)

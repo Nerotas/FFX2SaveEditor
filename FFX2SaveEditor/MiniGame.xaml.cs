@@ -63,8 +63,8 @@ namespace FFX2SaveEditor
         // Bikanel
         public uint SuccessfulDigs { get { return ParseUInt(tbxSuccessfulDigs.Text); } set { tbxSuccessfulDigs.Text = value.ToString(); } }
         public uint FailedDigs { get { return ParseUInt(tbxFailedDigs.Text); } set { tbxFailedDigs.Text = value.ToString(); } }
-        // Besaid
-        public uint GunnerPoints { get { return ParseUInt(tbxGunnerPoints.Text); } set { tbxGunnerPoints.Text = value.ToString(); } }
+    // Besaid
+    public uint GunnerPoints { get { return ParseUInt(tbxGunnerPoints.Text); } set { tbxGunnerPoints.Text = value.ToString(); UpdateGunnerTier(); } }
         // Chocobo
         public byte[] ChocoboSuccesses
         {
@@ -97,6 +97,14 @@ namespace FFX2SaveEditor
             grpChocobo.Visibility = (Mode == MiniGameMode.Chocobo || all) ? Visibility.Visible : Visibility.Collapsed;
             grpGagazet.Visibility = (Mode == MiniGameMode.Gagazet || all) ? Visibility.Visible : Visibility.Collapsed;
             grpMisc.Visibility = (Mode == MiniGameMode.Misc || all) ? Visibility.Visible : Visibility.Collapsed;
+
+            // Initialize computed publicity levels if Calm Lands is visible
+            if (grpCalm.Visibility == Visibility.Visible)
+                UpdateCalmPublicityLevels();
+
+            // Initialize Gunner tier if Besaid is visible
+            if (grpBesaid.Visibility == Visibility.Visible)
+                UpdateGunnerTier();
         }
 
         private void textbox_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -126,6 +134,99 @@ namespace FFX2SaveEditor
         private void PreviewFloatHandler(object sender, TextCompositionEventArgs e)
         {
             e.Handled = Regex.IsMatch(e.Text, "[^0-9.]") || (e.Text == "." && ((TextBox)sender).Text.Contains("."));
+        }
+
+        private int ComputeLevel(uint points)
+        {
+            // Publicity Level mapping (0..5) consistent with CalmLands:
+            // 0-99 => 0, 100-199 => 1, 200-299 => 2, 300-399 => 3, 400+ => 5
+            if (points >= 400) return 5;
+            var level = (int)(points / 100);
+            if (level < 0) level = 0;
+            if (level > 5) level = 5;
+            return level;
+        }
+
+        private void UpdateCalmPublicityLevels()
+        {
+            try
+            {
+                if (txtOpenAirLevel2 == null || txtArgentLevel2 == null) return;
+                uint oa = ParseUInt(tbxOpenAirPoints.Text);
+                uint ar = ParseUInt(tbxArgentPoints.Text);
+                // Clamp to researched publicity cap (400)
+                if (oa > 400) { tbxOpenAirPoints.Text = "400"; oa = 400; }
+                if (ar > 400) { tbxArgentPoints.Text = "400"; ar = 400; }
+                var oaLevel = ComputeLevel(oa);
+                var arLevel = ComputeLevel(ar);
+                var oaNext = oaLevel >= 5 ? (uint)400 : (uint)((oaLevel + 1) * 100);
+                var arNext = arLevel >= 5 ? (uint)400 : (uint)((arLevel + 1) * 100);
+                txtOpenAirLevel2.Text = oaLevel >= 5 ? "Level: 5 (MAX)" : $"Level: {oaLevel} (next @ {oaNext})";
+                txtArgentLevel2.Text = arLevel >= 5 ? "Level: 5 (MAX)" : $"Level: {arLevel} (next @ {arNext})";
+            }
+            catch { /* ignore parse errors */ }
+        }
+
+        private void CalmPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateCalmPublicityLevels();
+        }
+
+        private void Marriage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Clamp marriage/matchmaking points to byte max (255)
+            try
+            {
+                uint m = ParseUInt(tbxMarraigePoints.Text);
+                if (m > 255) tbxMarraigePoints.Text = "255";
+            }
+            catch { }
+        }
+
+        // Gunner's Gauntlet thresholds and UI updater
+        private static readonly int[] GunnerThresholds = new[] { 500, 750, 900, 1000, 1150, 1300, 1400, 2000, 2800 };
+        private static readonly string[] GunnerRewards = new[] {
+            "Enigma Plate (GG)",
+            "Power Wrist",
+            "Silver Bracer",
+            "Titanium Bangle",
+            "Mortal Coil (GG)",
+            "Beaded Brooch",
+            "Diamond Gloves",
+            "Faerie Earrings",
+            "Adamantite"
+        };
+
+        private void GunnerPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGunnerTier();
+        }
+
+        private void UpdateGunnerTier()
+        {
+            try
+            {
+                if (txtGunnerTier == null) return;
+                var score = ParseUInt(tbxGunnerPoints.Text);
+                int tier = 0;
+                while (tier < GunnerThresholds.Length && score >= GunnerThresholds[tier]) tier++;
+
+                if (tier >= GunnerThresholds.Length)
+                {
+                    txtGunnerTier.Text = "Reward Tier: MAX (all rewards reached)";
+                }
+                else if (tier == 0)
+                {
+                    txtGunnerTier.Text = $"Reward Tier: —  •  Next at: {GunnerThresholds[0]} ({GunnerRewards[0]})";
+                }
+                else
+                {
+                    var lastIdx = tier - 1;
+                    var nextAt = GunnerThresholds[tier];
+                    txtGunnerTier.Text = $"Reward Tier: Lv{tier}  •  Last: {GunnerRewards[lastIdx]}  •  Next at: {nextAt} ({GunnerRewards[tier]})";
+                }
+            }
+            catch { }
         }
     }
 

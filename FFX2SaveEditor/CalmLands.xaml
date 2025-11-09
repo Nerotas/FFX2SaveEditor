@@ -55,12 +55,12 @@
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
             </Label.Effect>
         </Label>
-        <TextBox x:Name="tbxOpenAirPoints" Text="999999999" HorizontalAlignment="Left" Margin="111,104,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
+    <TextBox x:Name="tbxOpenAirPoints" Text="999999999" HorizontalAlignment="Left" Margin="111,104,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
             <TextBox.Effect>
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="10" Opacity="0.5"/>
             </TextBox.Effect>
         </TextBox>
-        <TextBox x:Name="tbxArgentPoints" HorizontalAlignment="Left" Height="28" Margin="266,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
+    <TextBox x:Name="tbxArgentPoints" HorizontalAlignment="Left" Height="28" Margin="266,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="Points_TextChanged">
             <TextBox.Effect>
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="10" Opacity="0.5"/>
             </TextBox.Effect>
@@ -70,7 +70,7 @@
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
             </Label.Effect>
         </Label>
-        <TextBox x:Name="tbxMarraigePoints" Text="999999999" HorizontalAlignment="Left" Margin="221,185,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel">
+    <TextBox x:Name="tbxMarraigePoints" Text="999999999" HorizontalAlignment="Left" Margin="221,185,0,0" VerticalAlignment="Top" Width="105" FontSize="16" FontWeight="Bold" MaxLength="11" MouseWheel="textbox_MouseWheel" TextChanged="Marriage_TextChanged">
             <TextBox.Effect>
                 <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="10" Opacity="0.5"/>
             </TextBox.Effect>
@@ -107,6 +107,14 @@
         </Label>
         <!-- Leader/tie status for publicity points -->
         <TextBlock x:Name="txtLeaderStatus" HorizontalAlignment="Left" Margin="19,235,0,0" VerticalAlignment="Top" Foreground="#CFCFCF" FontSize="14"/>
+
+        <!-- Computed publicity levels and expectations -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="19,255,0,0" VerticalAlignment="Top">
+            <TextBlock x:Name="txtOpenAirLevel" Foreground="#CFCFCF" FontSize="14"/>
+            <TextBlock x:Name="txtArgentLevel" Foreground="#CFCFCF" FontSize="14"/>
+            <TextBlock TextWrapping="Wrap" Margin="0,6,0,0" Foreground="#CFCFCF" FontSize="12" Opacity="0.85"
+                       Text="Note: In-game Publicity Level display is gated by story Chapter (Ch1 shows up to Lv2, Ch2 Lv3, Ch3 Lv4, Ch5 Lv5). Max NPC-only points is 400; Calm Lands minigame credits won’t raise the level beyond 5."/>
+        </StackPanel>
 
         <!-- Publicity quick actions -->
         <Button x:Name="btnOpenAirWins" Style="{StaticResource Ffx2Button}" Margin="10,260,0,0" Click="btnOpenAirWins_Click" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Height="28" VerticalAlignment="Top">

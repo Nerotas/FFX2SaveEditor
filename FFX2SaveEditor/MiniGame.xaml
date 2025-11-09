@@ -21,6 +21,8 @@
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85"
                                    Text="Publicity campaigns for Open Air and Argent; Marriage points affect the marriage scene outcome."/>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,8" Foreground="#CFCFCF" FontSize="12" Opacity="0.9"
+                                   Text="Note: In-game Publicity Level display is gated by Chapter (Ch1→Lv2, Ch2→Lv3, Ch3→Lv4, Ch5→Lv5). NPC-only max points is 400; minigame credits don’t raise the level beyond 5."/>
                         <UniformGrid Columns="2" Margin="0,2,0,2">
                             <StackPanel Margin="0,0,8,0">
                                 <TextBlock Text="Open Air Credits"/>
@@ -31,16 +33,18 @@
                                 <TextBox x:Name="tbxArgentCredits" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
                             </StackPanel>
                             <StackPanel Margin="0,4,8,0">
-                                <TextBlock Text="Open Air Points"/>
-                                <TextBox x:Name="tbxOpenAirPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                                <TextBlock Text="Open Air Points (max 400)"/>
+                                <TextBox x:Name="tbxOpenAirPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="CalmPoints_TextChanged"/>
+                                <TextBlock x:Name="txtOpenAirLevel2" Foreground="#CFCFCF" FontSize="12"/>
                             </StackPanel>
                             <StackPanel Margin="0,4,0,0">
-                                <TextBlock Text="Argent Points"/>
-                                <TextBox x:Name="tbxArgentPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                                <TextBlock Text="Argent Points (max 400)"/>
+                                <TextBox x:Name="tbxArgentPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="CalmPoints_TextChanged"/>
+                                <TextBlock x:Name="txtArgentLevel2" Foreground="#CFCFCF" FontSize="12"/>
                             </StackPanel>
                             <StackPanel Margin="0,4,8,0">
-                                <TextBlock Text="Marriage Points"/>
-                                <TextBox x:Name="tbxMarraigePoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                                <TextBlock Text="Marriage Points (max 255)"/>
+                                <TextBox x:Name="tbxMarraigePoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="Marriage_TextChanged"/>
                             </StackPanel>
                             <StackPanel Margin="0,4,0,0">
                                 <TextBlock Text="Hover Rides"/>
@@ -112,8 +116,11 @@
                 <GroupBox x:Name="grpBesaid" Header="Besaid (Gunner's Gauntlet)" Visibility="Collapsed" Margin="0,0,0,8">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85" Text="Score used in the Gunner's Gauntlet mini-game."/>
-                        <TextBlock Text="Gunner Points"/>
-                        <TextBox x:Name="tbxGunnerPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel"/>
+                        <TextBlock Text="Gunner Points (score)"/>
+                        <TextBox x:Name="tbxGunnerPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="GunnerPoints_TextChanged"/>
+                        <TextBlock x:Name="txtGunnerTier" Foreground="#CFCFCF" FontSize="12" Margin="0,4,0,0"/>
+                        <TextBlock TextWrapping="Wrap" Margin="0,6,0,0" Foreground="#CFCFCF" FontSize="12" Opacity="0.9"
+                                   Text="Reward thresholds: 500, 750, 900, 1000, 1150, 1300, 1400, 2000, 2800 (Adamantite). Rewards are granted once and high score carries into NG+. Scores can exceed 2800 but no further rewards are given."/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox x:Name="grpChocobo" Header="Chocobo Dungeon" Visibility="Collapsed" Margin="0,0,0,8">

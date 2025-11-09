@@ -80,16 +80,32 @@ namespace FFX2SaveEditor
             if (qty > 999999999)
                 qty = 999999999;
 
+            // Clamp real caps for specific fields
+            if (tbx == tbxOpenAirPoints || tbx == tbxArgentPoints)
+            {
+                if (qty < 0) qty = 0;
+                if (qty > 400) qty = 400; // researched max NPC-only publicity points
+            }
+            else if (tbx == tbxMarraigePoints)
+            {
+                if (qty < 0) qty = 0;
+                if (qty > 255) qty = 255; // matchmaking is a byte-backed counter
+            }
+
             tbx.Text = qty.ToString();
             // Keep leader status in sync when scrolling on points
             if (tbx == tbxOpenAirPoints || tbx == tbxArgentPoints)
+            {
                 UpdateLeaderStatus();
+                UpdatePublicityLevels();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Initialize leader label
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -146,38 +162,82 @@ namespace FFX2SaveEditor
 
         private void Points_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // Clamp to researched max for publicity fields
+            var oa = ParseUint(tbxOpenAirPoints);
+            var ar = ParseUint(tbxArgentPoints);
+            if (oa > 400) tbxOpenAirPoints.Text = "400";
+            if (ar > 400) tbxArgentPoints.Text = "400";
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
+        }
+
+        private void Marriage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Clamp marriage points to real max (255)
+            var val = ParseUint(tbxMarraigePoints);
+            if (val > 255)
+            {
+                tbxMarraigePoints.Text = "255";
+            }
+        }
+
+        private int ComputeLevel(uint points)
+        {
+            // Publicity Level mapping (0..5):
+            // 0-99 => 0, 100-199 => 1, 200-299 => 2, 300-399 => 3, 400+ => 5 (MAX)
+            if (points >= 400) return 5;
+            var level = (int)(points / 100);
+            if (level < 0) level = 0;
+            if (level > 5) level = 5;
+            return level;
+        }
+
+        private void UpdatePublicityLevels()
+        {
+            if (txtOpenAirLevel == null || txtArgentLevel == null) return;
+            var openAir = ParseUint(tbxOpenAirPoints);
+            var argent = ParseUint(tbxArgentPoints);
+            var oaLevel = ComputeLevel(openAir);
+            var arLevel = ComputeLevel(argent);
+            var oaNext = oaLevel >= 5 ? (uint)400 : (uint)((oaLevel + 1) * 100);
+            var arNext = arLevel >= 5 ? (uint)400 : (uint)((arLevel + 1) * 100);
+            txtOpenAirLevel.Text = oaLevel >= 5 ? "Open Air Level: 5 (MAX)" : $"Open Air Level: {oaLevel} (next @ {oaNext})";
+            txtArgentLevel.Text = arLevel >= 5 ? "Argent Level: 5 (MAX)" : $"Argent Level: {arLevel} (next @ {arNext})";
         }
 
         private void btnOpenAirWins_Click(object sender, RoutedEventArgs e)
         {
-            SetUint(tbxOpenAirPoints, uint.MaxValue);
+            SetUint(tbxOpenAirPoints, 400);
             SetUint(tbxArgentPoints, 0);
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
         }
 
         private void btnArgentWins_Click(object sender, RoutedEventArgs e)
         {
             SetUint(tbxOpenAirPoints, 0);
-            SetUint(tbxArgentPoints, uint.MaxValue);
+            SetUint(tbxArgentPoints, 400);
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
         }
 
         private void btnTie_Click(object sender, RoutedEventArgs e)
         {
             var openAir = ParseUint(tbxOpenAirPoints);
             var argent = ParseUint(tbxArgentPoints);
-            var target = Math.Max(openAir, argent);
+            var target = Math.Min(400u, Math.Max(openAir, argent));
             SetUint(tbxOpenAirPoints, target);
             SetUint(tbxArgentPoints, target);
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
         }
 
         private void btnMaxBoth_Click(object sender, RoutedEventArgs e)
         {
-            SetUint(tbxOpenAirPoints, uint.MaxValue);
-            SetUint(tbxArgentPoints, uint.MaxValue);
+            SetUint(tbxOpenAirPoints, 400);
+            SetUint(tbxArgentPoints, 400);
             UpdateLeaderStatus();
+            UpdatePublicityLevels();
         }
 
         private void btnZeroBoth_Click(object sender, RoutedEventArgs e)
@@ -189,7 +249,7 @@ namespace FFX2SaveEditor
 
         private void btnMarriageMax_Click(object sender, RoutedEventArgs e)
         {
-            SetUint(tbxMarraigePoints, uint.MaxValue);
+            SetUint(tbxMarraigePoints, 255);
         }
 
         private void btnMarriageZero_Click(object sender, RoutedEventArgs e)

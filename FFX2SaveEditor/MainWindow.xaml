@@ -218,7 +218,7 @@
                     <TranslateTransform x:Name="transStoryCompletion" X="0" Y="0" />
                 </Button.RenderTransform>
             </Button>
-            <Button Style="{StaticResource Ffx2Button}" x:Name="btnEquip" HorizontalAlignment="Left" Margin="180,320,0,0" VerticalAlignment="Top" Width="360" Height="60" FontWeight="Bold" FontSize="28" Foreground="Black" GotFocus="Button_GotFocus" MouseEnter="Button_MouseEnter" Click="btnEquip_Click">
+            <Button Style="{StaticResource Ffx2Button}" x:Name="btnEquip" HorizontalAlignment="Left" Margin="180,320,0,0" VerticalAlignment="Top" Width="360" Height="60" FontWeight="Bold" FontSize="28" Foreground="Black" GotFocus="Button_GotFocus" MouseEnter="Button_MouseEnter" Click="btnEquip_Click" Visibility="Collapsed">
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
@@ -287,7 +287,7 @@
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
-                <TextBlock x:Name="txtMiniGamesLabel" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mini-Games" Foreground="#373737">
+                <TextBlock x:Name="txtMiniGamesLabel" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mini-Games" Foreground="#E1E1E1">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="0" Direction="315" Color="Black" ShadowDepth="3"/>
                     </TextBlock.Effect>
@@ -296,7 +296,7 @@
                     <TranslateTransform x:Name="transMiniGames" X="0" Y="0" />
                 </Button.RenderTransform>
             </Button>
-            <Button Style="{StaticResource Ffx2Button}" x:Name="btnSidequests" Cursor="Hand" HorizontalAlignment="Left" Margin="180,740,0,0" VerticalAlignment="Top" Width="360" Height="60" FontWeight="Bold" FontSize="28" GotFocus="Button_GotFocus" MouseEnter="Button_MouseEnter" Click="btnSidequests_Click">
+            <Button Style="{StaticResource Ffx2Button}" x:Name="btnSidequests" Cursor="Hand" HorizontalAlignment="Left" Margin="180,740,0,0" VerticalAlignment="Top" Width="360" Height="60" FontWeight="Bold" FontSize="28" GotFocus="Button_GotFocus" MouseEnter="Button_MouseEnter" Click="btnSidequests_Click" Visibility="Collapsed">
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="0" ShadowDepth="10" Direction="315" Color="Black" Opacity="0.5"/>
                 </Button.Effect>
