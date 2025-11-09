@@ -607,16 +607,17 @@ namespace FFX2SaveEditor
             SwitchToScreen(MenuScreen.Main);
 
             menuScreen = MenuScreen.Main;
-            btnItems.Visibility = Visibility.Visible;
-            btnStoryCompletion.Visibility = Visibility.Visible;
-            btnEquip.Visibility = Visibility.Visible;
-            btnGarmentGrid.Visibility = Visibility.Visible;
-            btnAccessories.Visibility = Visibility.Visible;
-            btnAbilities.Visibility = Visibility.Visible;
-            btnDresspheres.Visibility = Visibility.Visible;
-            btnMiniGames.Visibility = Visibility.Visible;
-            btnSidequests.Visibility = Visibility.Visible;
-            btnConfig.Visibility = Visibility.Visible;
+            // Respect initial Collapsed state for controls that are intentionally hidden by default
+            if (btnItems.Visibility != Visibility.Collapsed) btnItems.Visibility = Visibility.Visible;
+            if (btnStoryCompletion.Visibility != Visibility.Collapsed) btnStoryCompletion.Visibility = Visibility.Visible;
+            if (btnEquip.Visibility != Visibility.Collapsed) btnEquip.Visibility = Visibility.Visible;
+            if (btnGarmentGrid.Visibility != Visibility.Collapsed) btnGarmentGrid.Visibility = Visibility.Visible;
+            if (btnAccessories.Visibility != Visibility.Collapsed) btnAccessories.Visibility = Visibility.Visible;
+            if (btnAbilities.Visibility != Visibility.Collapsed) btnAbilities.Visibility = Visibility.Visible;
+            if (btnDresspheres.Visibility != Visibility.Collapsed) btnDresspheres.Visibility = Visibility.Visible;
+            if (btnMiniGames.Visibility != Visibility.Collapsed) btnMiniGames.Visibility = Visibility.Visible;
+            if (btnSidequests.Visibility != Visibility.Collapsed) btnSidequests.Visibility = Visibility.Visible;
+            if (btnConfig.Visibility != Visibility.Collapsed) btnConfig.Visibility = Visibility.Visible;
 
             DoubleAnimation dad = new DoubleAnimation(0, TimeSpan.FromSeconds(0.25));
             transItems.BeginAnimation(TranslateTransform.YProperty, dad);
@@ -675,20 +676,20 @@ namespace FFX2SaveEditor
             btnMiniGames.IsEnabled = true;
             btnSidequests.IsEnabled = true;
             btnConfig.IsEnabled = true;
-            tbxGil.Visibility = Visibility.Visible;
-            lblPaineHP.Visibility = Visibility.Visible;
-            tbxPaineLvl.Visibility = Visibility.Visible;
-            lblPaineMP.Visibility = Visibility.Visible;
-            tbxPlayTime.Visibility = Visibility.Visible;
-            lblRikkuHP.Visibility = Visibility.Visible;
-            tbxRikkuLvl.Visibility = Visibility.Visible;
-            lblRikkuMP.Visibility = Visibility.Visible;
-            lblYunaHP.Visibility = Visibility.Visible;
-            tbxYunaLvl.Visibility = Visibility.Visible;
-            lblYunaMP.Visibility = Visibility.Visible;
-            lblPaineDress.Visibility = Visibility.Visible;
-            lblRikkuDress.Visibility = Visibility.Visible;
-            lblYunaDress.Visibility = Visibility.Visible;
+            if (tbxGil.Visibility != Visibility.Collapsed) tbxGil.Visibility = Visibility.Visible;
+            if (lblPaineHP.Visibility != Visibility.Collapsed) lblPaineHP.Visibility = Visibility.Visible;
+            if (tbxPaineLvl.Visibility != Visibility.Collapsed) tbxPaineLvl.Visibility = Visibility.Visible;
+            if (lblPaineMP.Visibility != Visibility.Collapsed) lblPaineMP.Visibility = Visibility.Visible;
+            if (tbxPlayTime.Visibility != Visibility.Collapsed) tbxPlayTime.Visibility = Visibility.Visible;
+            if (lblRikkuHP.Visibility != Visibility.Collapsed) lblRikkuHP.Visibility = Visibility.Visible;
+            if (tbxRikkuLvl.Visibility != Visibility.Collapsed) tbxRikkuLvl.Visibility = Visibility.Visible;
+            if (lblRikkuMP.Visibility != Visibility.Collapsed) lblRikkuMP.Visibility = Visibility.Visible;
+            if (lblYunaHP.Visibility != Visibility.Collapsed) lblYunaHP.Visibility = Visibility.Visible;
+            if (tbxYunaLvl.Visibility != Visibility.Collapsed) tbxYunaLvl.Visibility = Visibility.Visible;
+            if (lblYunaMP.Visibility != Visibility.Collapsed) lblYunaMP.Visibility = Visibility.Visible;
+            if (lblPaineDress.Visibility != Visibility.Collapsed) lblPaineDress.Visibility = Visibility.Visible;
+            if (lblRikkuDress.Visibility != Visibility.Collapsed) lblRikkuDress.Visibility = Visibility.Visible;
+            if (lblYunaDress.Visibility != Visibility.Collapsed) lblYunaDress.Visibility = Visibility.Visible;
         }
 
         private void ClearItemScreen()

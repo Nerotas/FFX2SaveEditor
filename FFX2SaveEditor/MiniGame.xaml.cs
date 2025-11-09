@@ -228,6 +228,21 @@ namespace FFX2SaveEditor
             }
             catch { }
         }
+
+        // Quick-set buttons for Gunner's Gauntlet tiers
+        private void BtnGunnerTier_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b && b.Tag is string s && uint.TryParse(s, out var val))
+            {
+                tbxGunnerPoints.Text = val.ToString();
+                UpdateGunnerTier();
+            }
+            else if (sender is Button b2 && b2.Tag is int i)
+            {
+                tbxGunnerPoints.Text = i.ToString();
+                UpdateGunnerTier();
+            }
+        }
     }
 
     public enum MiniGameMode { CalmLands, ThunderPlains, Bikanel, Besaid, Chocobo, Gagazet, Misc, All }

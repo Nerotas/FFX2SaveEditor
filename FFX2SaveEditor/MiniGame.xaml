@@ -66,6 +66,8 @@
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#E1E1E1" Opacity="0.85"
                                    Text="Track calibration of 10 towers. Attempts is the number of tries; Calibrated marks the tower as complete."/>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,8" Foreground="#CFCFCF" FontSize="12" Opacity="0.9"
+                                   Text="Helper: In-game a tower's calibration status only becomes visible after you attempt it at least once. Setting 'Attempts' > 0 simulates having tried the tower."/>
                         <UniformGrid Columns="3" Margin="0,2,0,4">
                             <TextBlock FontWeight="Bold" Text="Tower"/>
                             <TextBlock FontWeight="Bold" Text="Calibrated"/>
@@ -119,6 +121,19 @@
                         <TextBlock Text="Gunner Points (score)"/>
                         <TextBox x:Name="tbxGunnerPoints" PreviewTextInput="PreviewTextInputHandler" MouseWheel="textbox_MouseWheel" TextChanged="GunnerPoints_TextChanged"/>
                         <TextBlock x:Name="txtGunnerTier" Foreground="#CFCFCF" FontSize="12" Margin="0,4,0,0"/>
+                        <!-- Quick set buttons for Gunner tiers -->
+                        <WrapPanel Margin="0,6,0,0" ItemHeight="28" ItemWidth="64">
+                            <Button Content="500" Click="BtnGunnerTier_Click" Tag="500" Margin="0,0,6,6"/>
+                            <Button Content="750" Click="BtnGunnerTier_Click" Tag="750" Margin="0,0,6,6"/>
+                            <Button Content="900" Click="BtnGunnerTier_Click" Tag="900" Margin="0,0,6,6"/>
+                            <Button Content="1000" Click="BtnGunnerTier_Click" Tag="1000" Margin="0,0,6,6"/>
+                            <Button Content="1150" Click="BtnGunnerTier_Click" Tag="1150" Margin="0,0,6,6"/>
+                            <Button Content="1300" Click="BtnGunnerTier_Click" Tag="1300" Margin="0,0,6,6"/>
+                            <Button Content="1400" Click="BtnGunnerTier_Click" Tag="1400" Margin="0,0,6,6"/>
+                            <Button Content="2000" Click="BtnGunnerTier_Click" Tag="2000" Margin="0,0,6,6"/>
+                            <Button Content="2800" Click="BtnGunnerTier_Click" Tag="2800" Margin="0,0,6,6"/>
+                            <Button Content="MAX" Click="BtnGunnerTier_Click" Tag="3000" Margin="0,0,6,6"/>
+                        </WrapPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,6,0,0" Foreground="#CFCFCF" FontSize="12" Opacity="0.9"
                                    Text="Reward thresholds: 500, 750, 900, 1000, 1150, 1300, 1400, 2000, 2800 (Adamantite). Rewards are granted once and high score carries into NG+. Scores can exceed 2800 but no further rewards are given."/>
                     </StackPanel>
