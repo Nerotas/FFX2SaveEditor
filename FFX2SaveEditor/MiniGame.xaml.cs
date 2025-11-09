@@ -38,16 +38,17 @@ namespace FFX2SaveEditor
         public uint HoverRides { get { return ParseUInt(tbxHoverRides.Text); } set { tbxHoverRides.Text = value.ToString(); } }
 
         // Thunder Plains
-        public byte Tower1Calibrated { get { return (bool)(chkT1.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT1.IsChecked = value == 1; } }
-        public byte Tower2Calibrated { get { return (bool)(chkT2.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT2.IsChecked = value == 1; } }
-        public byte Tower3Calibrated { get { return (bool)(chkT3.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT3.IsChecked = value == 1; } }
-        public byte Tower4Calibrated { get { return (bool)(chkT4.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT4.IsChecked = value == 1; } }
-        public byte Tower5Calibrated { get { return (bool)(chkT5.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT5.IsChecked = value == 1; } }
-        public byte Tower6Calibrated { get { return (bool)(chkT6.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT6.IsChecked = value == 1; } }
-        public byte Tower7Calibrated { get { return (bool)(chkT7.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT7.IsChecked = value == 1; } }
-        public byte Tower8Calibrated { get { return (bool)(chkT8.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT8.IsChecked = value == 1; } }
-        public byte Tower9Calibrated { get { return (bool)(chkT9.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT9.IsChecked = value == 1; } }
-        public byte Tower10Calibrated { get { return (bool)(chkT10.IsChecked ?? false) ? (byte)1 : (byte)0; } set { chkT10.IsChecked = value == 1; } }
+    // Thunder Plains tower calibration uses a score (0-30). Treat checked as a full calibration score of 30
+    public byte Tower1Calibrated { get { return (bool)(chkT1.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT1.IsChecked = value > 25; } }
+    public byte Tower2Calibrated { get { return (bool)(chkT2.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT2.IsChecked = value > 25; } }
+    public byte Tower3Calibrated { get { return (bool)(chkT3.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT3.IsChecked = value > 25; } }
+    public byte Tower4Calibrated { get { return (bool)(chkT4.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT4.IsChecked = value > 25; } }
+    public byte Tower5Calibrated { get { return (bool)(chkT5.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT5.IsChecked = value > 25; } }
+    public byte Tower6Calibrated { get { return (bool)(chkT6.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT6.IsChecked = value > 25; } }
+    public byte Tower7Calibrated { get { return (bool)(chkT7.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT7.IsChecked = value > 25; } }
+    public byte Tower8Calibrated { get { return (bool)(chkT8.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT8.IsChecked = value > 25; } }
+    public byte Tower9Calibrated { get { return (bool)(chkT9.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT9.IsChecked = value > 25; } }
+    public byte Tower10Calibrated { get { return (bool)(chkT10.IsChecked ?? false) ? (byte)30 : (byte)0; } set { chkT10.IsChecked = value > 25; } }
         public byte Tower1Attempts { get { return ParseByte(tbxT1A.Text); } set { tbxT1A.Text = value.ToString(); } }
         public byte Tower2Attempts { get { return ParseByte(tbxT2A.Text); } set { tbxT2A.Text = value.ToString(); } }
         public byte Tower3Attempts { get { return ParseByte(tbxT3A.Text); } set { tbxT3A.Text = value.ToString(); } }

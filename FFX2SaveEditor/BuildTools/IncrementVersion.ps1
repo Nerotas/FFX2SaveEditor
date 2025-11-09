@@ -64,3 +64,25 @@ if ($m2.Success) {
 [System.IO.File]::WriteAllText($Path, $content, [System.Text.Encoding]::UTF8)
 
 Write-Host "Version increment complete." -ForegroundColor Green
+
+# Also mirror the version to Version.props for packaging purposes
+try {
+    $verPattern = '\[assembly:\s*AssemblyFileVersion\("(?<ver>\d+\.\d+\.\d+\.\d+)"\)\]'
+    $m = [System.Text.RegularExpressions.Regex]::Match($content, $verPattern)
+    if ($m.Success) {
+        $version = $m.Groups['ver'].Value
+        $propsPath = Join-Path $PSScriptRoot '..\Version.props'
+        $xml = @(
+            '<?xml version="1.0" encoding="utf-8"?>',
+            '<Project>',
+            '  <PropertyGroup>',
+            "    <AppVersion>$version</AppVersion>",
+            '  </PropertyGroup>',
+            '</Project>'
+        ) -join "`r`n"
+        Set-Content -Path $propsPath -Value $xml -Encoding UTF8
+        Write-Host "Synchronized AppVersion in Version.props -> $version" -ForegroundColor Green
+    }
+} catch {
+    Write-Warning "Failed to update Version.props: $($_.Exception.Message)"
+}

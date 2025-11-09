@@ -571,39 +571,94 @@ namespace FFX2SaveEditor
             return total;
         }
 
+        /// <summary>
+        /// Writes all mini-game related data blocks to the underlying stream.
+        /// Broken into smaller private helpers for maintainability; public API unchanged.
+        /// </summary>
         public virtual void WriteMiniGames()
         {
             if (bw == null) return;
+            WriteCalmLandsEconomy();      // Credits (Chapter 1+) – 0x2EC
+            WriteThunderPlainsTowers();   // Tower calibration / attempts – 0x301
+            WriteBikanelDesert();         // Successful / failed digs – 0x340
+            WriteBesaidGunner();          // Gunner’s Gauntlet points – 0x3B0
+            WriteCalmLandsChapter5();     // Chapter 5 extra credits + hover rides – 0x4B4 / 0x4C1
+            WriteChocoboDungeon();        // Chocobo dungeon successes – 0x4C7
+            WriteChocoboGreens();         // Greens inventory – 0xD0C
+            WriteGagazetKimahri();        // Kimahri self-esteem values – 0xDB8
+            WritePublicity();             // Publicity & marriage block – 0xDE4
+            WriteMiscFaction();           // Faction – 0xC55
+        }
+
+        /// <summary>
+        /// Execute a mutation of mini-game fields and persist them atomically.
+        /// </summary>
+        public void CommitMiniGames(Action mutator)
+        {
+            if (mutator == null) return;
+            mutator();
+            WriteMiniGames();
+        }
+
+        private void WriteCalmLandsEconomy()
+        {
             bw.BaseStream.Seek(0x2ec, SeekOrigin.Begin);
             bw.Write(OpenAirCredits);
             bw.Write(ArgentCredits);
+        }
+
+        private void WriteThunderPlainsTowers()
+        {
             bw.BaseStream.Seek(0x301, SeekOrigin.Begin);
             bw.Write(TowerCalibrations);
             bw.Write(TowerAttempts);
+        }
+
+        private void WriteBikanelDesert()
+        {
             bw.BaseStream.Seek(0x340, SeekOrigin.Begin);
             bw.Write(SuccessfulDigs);
             bw.Write(FailedDigs);
+        }
+
+        private void WriteBesaidGunner()
+        {
             bw.BaseStream.Seek(0x3b0, SeekOrigin.Begin);
             bw.Write(GunnerPoints);
+        }
+
+        private void WriteCalmLandsChapter5()
+        {
             bw.BaseStream.Seek(0x4b4, SeekOrigin.Begin);
             bw.Write(SlCredits5);
             bw.BaseStream.Seek(0x4c1, SeekOrigin.Begin);
             bw.Write(HoverRides);
+        }
+
+        private void WriteChocoboDungeon()
+        {
             bw.BaseStream.Seek(0x4c7, SeekOrigin.Begin);
             bw.Write(ChocoboSuccesses);
+        }
+
+        private void WriteChocoboGreens()
+        {
             bw.BaseStream.Seek(0xd0c, SeekOrigin.Begin);
             bw.Write(PahsanaGreens);
             bw.Write(MimettGreens);
             bw.Write(SylkisGreens);
             bw.Write(GysahlGreens);
+        }
+
+        private void WriteGagazetKimahri()
+        {
             bw.BaseStream.Seek(0xdb8, SeekOrigin.Begin);
             bw.Write(KimahriSelfEsteemCh2);
             bw.Write(KimahriSelfEsteem);
-            bw.BaseStream.Seek(0xde4, SeekOrigin.Begin);
-            bw.Write(OpenAirPoints);
-            bw.Write(ArgentPoints);
-            bw.Write(MarraigePoints);
-            bw.Write(SlCredits);
+        }
+
+        private void WriteMiscFaction()
+        {
             bw.BaseStream.Seek(0xc55, SeekOrigin.Begin);
             bw.Write(Faction);
         }

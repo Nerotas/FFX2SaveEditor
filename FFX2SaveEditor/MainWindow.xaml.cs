@@ -233,6 +233,20 @@ namespace FFX2SaveEditor
             MenuScreen current = menuScreen;
             menuScreen = screen;
 
+            // Ensure the Mini-Games label resets when leaving the selector
+            if (current == MenuScreen.MiniGameSelect && screen != MenuScreen.MiniGameSelect)
+            {
+                try
+                {
+                    if (txtMiniGamesLabel != null)
+                    {
+                        txtMiniGamesLabel.Text = "Mini-Games";
+                        txtMiniGamesLabel.Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x37, 0x37));
+                    }
+                }
+                catch { /* non-fatal UI reset */ }
+            }
+
             switch(current)
             {
                 case MenuScreen.Main:
@@ -296,16 +310,20 @@ namespace FFX2SaveEditor
 
         private void ClearMiniGameSelectScreen()
         {
-            DoubleAnimation da = new DoubleAnimation(8192, TimeSpan.FromSeconds(0.25));
+            // Mini-game selector uses the shared dress grid list; animate it out like other list screens
+            TimeSpan ts = new TimeSpan(0, 0, 0, 0, 25);
+            DoubleAnimation da = new DoubleAnimation(-1920, TimeSpan.FromSeconds(0.25));
+            ClearGarmDressScreen(da, ts);
             da.Completed += SubMenuClear;
-            transUnderConstruction.BeginAnimation(TranslateTransform.YProperty, da);
         }
 
         private void ClearMinigameScreen()
         {
-            DoubleAnimation da = new DoubleAnimation(8192, TimeSpan.FromSeconds(0.25));
+            // If any dedicated mini-game screen uses the dress grid, clear it the same way
+            TimeSpan ts = new TimeSpan(0, 0, 0, 0, 25);
+            DoubleAnimation da = new DoubleAnimation(-1920, TimeSpan.FromSeconds(0.25));
+            ClearGarmDressScreen(da, ts);
             da.Completed += SubMenuClear;
-            transUnderConstruction.BeginAnimation(TranslateTransform.YProperty, da);
         }
 
         private void ClearDressphereScreen()
@@ -1250,23 +1268,34 @@ namespace FFX2SaveEditor
 
         private void btnBlueBullets_Click(object sender, RoutedEventArgs e)
         {
-            // Filter the character's abilities to only the Gun Mage Blue Bullets (offset range 0x0060..0x007E)
-            var blueBulletList = save.Characters[(byte)currentChar]
-                .Abilities
-                .Where(a => a.Dressphere == (byte)Dressphere.GunMage && a.Offset >= 0x0060 && a.Offset <= 0x007E)
-                .ToList();
+            // Build per-character Blue Bullets lists for Gun Mage (offset range 0x0060..0x007E)
+            var perChar = new Dictionary<PartyMember, List<Ability>>();
+            foreach (PartyMember pm in new[] { PartyMember.Yuna, PartyMember.Rikku, PartyMember.Paine })
+            {
+                var list = save.Characters[(byte)pm]
+                    .Abilities
+                    .Where(a => a.Dressphere == (byte)Dressphere.GunMage && a.Offset >= 0x0060 && a.Offset <= 0x007E)
+                    .ToList();
+                if (list.Count > 0)
+                    perChar[pm] = list;
+            }
 
-            if (blueBulletList.Count == 0)
+            if (perChar.Count == 0)
                 return;
 
-            var dialog = new BlueBullets(blueBulletList);
+            var dialog = new MultiBlueBullets(perChar);
             if (dialog.ShowDialog() == true)
             {
-                foreach (var ability in blueBulletList)
+                // Persist changes for all three characters
+                foreach (var kvp in perChar)
                 {
-                    // Persist the AP changes (mastered/unmastered) made in the dialog
-                    save.WriteAbility((byte)currentChar, ability);
+                    var pm = kvp.Key;
+                    foreach (var ability in kvp.Value)
+                    {
+                        save.WriteAbility((byte)pm, ability);
+                    }
                 }
+                // Refresh current abilities view if we are still on abilities screen
                 UpdateAbilitiesScreen();
             }
         }
@@ -2027,15 +2056,17 @@ namespace FFX2SaveEditor
 
             if(form.ShowDialog() == true)
             {
-                save.OpenAirCredits = form.OpenAirCredits;
-                save.OpenAirPoints = form.OpenAirPoints;
-                save.ArgentCredits = form.ArgentCredits;
-                save.ArgentPoints = form.ArgentPoints;
-                save.MarraigePoints = form.MarraigePoints;
-                save.SlCredits = form.CreditsCh5;
-                save.SlCredits5 = form.Credits2Ch5;
-                // Apply publicity/marriage to the in-memory save immediately
-                save.WritePublicity();
+                save.CommitMiniGames(() =>
+                {
+                    save.OpenAirCredits = form.OpenAirCredits;
+                    save.OpenAirPoints = form.OpenAirPoints;
+                    save.ArgentCredits = form.ArgentCredits;
+                    save.ArgentPoints = form.ArgentPoints;
+                    save.MarraigePoints = form.MarraigePoints;
+                    save.SlCredits = form.CreditsCh5;
+                    save.SlCredits5 = form.Credits2Ch5;
+                    save.HoverRides = form.HoverRides;
+                });
             }
         }
 
@@ -2065,26 +2096,29 @@ namespace FFX2SaveEditor
 
             if(form.ShowDialog() == true)
             {
-                save.TowerCalibrations[0] = form.Tower1Calibrated;
-                save.TowerCalibrations[1] = form.Tower2Calibrated;
-                save.TowerCalibrations[2] = form.Tower3Calibrated;
-                save.TowerCalibrations[3] = form.Tower4Calibrated;
-                save.TowerCalibrations[4] = form.Tower5Calibrated;
-                save.TowerCalibrations[5] = form.Tower6Calibrated;
-                save.TowerCalibrations[6] = form.Tower7Calibrated;
-                save.TowerCalibrations[7] = form.Tower8Calibrated;
-                save.TowerCalibrations[8] = form.Tower9Calibrated;
-                save.TowerCalibrations[9] = form.Tower10Calibrated;
-                save.TowerAttempts[0] = form.Tower1Attempts;
-                save.TowerAttempts[1] = form.Tower2Attempts;
-                save.TowerAttempts[2] = form.Tower3Attempts;
-                save.TowerAttempts[3] = form.Tower4Attempts;
-                save.TowerAttempts[4] = form.Tower5Attempts;
-                save.TowerAttempts[5] = form.Tower6Attempts;
-                save.TowerAttempts[6] = form.Tower7Attempts;
-                save.TowerAttempts[7] = form.Tower8Attempts;
-                save.TowerAttempts[8] = form.Tower9Attempts;
-                save.TowerAttempts[9] = form.Tower10Attempts;
+                save.CommitMiniGames(() =>
+                {
+                    save.TowerCalibrations[0] = form.Tower1Calibrated;
+                    save.TowerCalibrations[1] = form.Tower2Calibrated;
+                    save.TowerCalibrations[2] = form.Tower3Calibrated;
+                    save.TowerCalibrations[3] = form.Tower4Calibrated;
+                    save.TowerCalibrations[4] = form.Tower5Calibrated;
+                    save.TowerCalibrations[5] = form.Tower6Calibrated;
+                    save.TowerCalibrations[6] = form.Tower7Calibrated;
+                    save.TowerCalibrations[7] = form.Tower8Calibrated;
+                    save.TowerCalibrations[8] = form.Tower9Calibrated;
+                    save.TowerCalibrations[9] = form.Tower10Calibrated;
+                    save.TowerAttempts[0] = form.Tower1Attempts;
+                    save.TowerAttempts[1] = form.Tower2Attempts;
+                    save.TowerAttempts[2] = form.Tower3Attempts;
+                    save.TowerAttempts[3] = form.Tower4Attempts;
+                    save.TowerAttempts[4] = form.Tower5Attempts;
+                    save.TowerAttempts[5] = form.Tower6Attempts;
+                    save.TowerAttempts[6] = form.Tower7Attempts;
+                    save.TowerAttempts[7] = form.Tower8Attempts;
+                    save.TowerAttempts[8] = form.Tower9Attempts;
+                    save.TowerAttempts[9] = form.Tower10Attempts;
+                });
             }
         }
 
@@ -2095,9 +2129,11 @@ namespace FFX2SaveEditor
             form.FailedDigs = save.FailedDigs;
             if (form.ShowDialog() == true)
             {
-                save.SuccessfulDigs = form.SuccessfulDigs;
-                save.FailedDigs = form.FailedDigs;
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    save.SuccessfulDigs = form.SuccessfulDigs;
+                    save.FailedDigs = form.FailedDigs;
+                });
             }
         }
 
@@ -2107,8 +2143,10 @@ namespace FFX2SaveEditor
             form.GunnerPoints = save.GunnerPoints;
             if (form.ShowDialog() == true)
             {
-                save.GunnerPoints = form.GunnerPoints;
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    save.GunnerPoints = form.GunnerPoints;
+                });
             }
         }
 
@@ -2122,12 +2160,14 @@ namespace FFX2SaveEditor
             form.GysahlGreens = save.GysahlGreens;
             if (form.ShowDialog() == true)
             {
-                save.ChocoboSuccesses = form.ChocoboSuccesses;
-                save.PahsanaGreens = form.PahsanaGreens;
-                save.MimettGreens = form.MimettGreens;
-                save.SylkisGreens = form.SylkisGreens;
-                save.GysahlGreens = form.GysahlGreens;
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    save.ChocoboSuccesses = form.ChocoboSuccesses;
+                    save.PahsanaGreens = form.PahsanaGreens;
+                    save.MimettGreens = form.MimettGreens;
+                    save.SylkisGreens = form.SylkisGreens;
+                    save.GysahlGreens = form.GysahlGreens;
+                });
             }
         }
 
@@ -2138,9 +2178,11 @@ namespace FFX2SaveEditor
             form.KimahriSelfEsteem = save.KimahriSelfEsteem;
             if (form.ShowDialog() == true)
             {
-                save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
-                save.KimahriSelfEsteem = form.KimahriSelfEsteem;
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
+                    save.KimahriSelfEsteem = form.KimahriSelfEsteem;
+                });
             }
         }
 
@@ -2152,10 +2194,12 @@ namespace FFX2SaveEditor
             form.OakaDebt = save.OakaDept;
             if (form.ShowDialog() == true)
             {
-                save.Faction = form.Faction;
-                save.Encounters = form.Encounters;
-                save.OakaDept = form.OakaDebt;
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    save.Faction = form.Faction;
+                    save.Encounters = form.Encounters;
+                    save.OakaDept = form.OakaDebt;
+                });
             }
         }
 
@@ -2213,56 +2257,57 @@ namespace FFX2SaveEditor
 
             if (form.ShowDialog() == true)
             {
-                // Calm Lands
-                save.OpenAirCredits = form.OpenAirCredits;
-                save.OpenAirPoints = form.OpenAirPoints;
-                save.ArgentCredits = form.ArgentCredits;
-                save.ArgentPoints = form.ArgentPoints;
-                save.MarraigePoints = form.MarraigePoints;
-                save.SlCredits = form.CreditsCh5;
-                save.SlCredits5 = form.Credits2Ch5;
-                save.HoverRides = form.HoverRides;
-                // Thunder
-                save.TowerCalibrations[0] = form.Tower1Calibrated;
-                save.TowerCalibrations[1] = form.Tower2Calibrated;
-                save.TowerCalibrations[2] = form.Tower3Calibrated;
-                save.TowerCalibrations[3] = form.Tower4Calibrated;
-                save.TowerCalibrations[4] = form.Tower5Calibrated;
-                save.TowerCalibrations[5] = form.Tower6Calibrated;
-                save.TowerCalibrations[6] = form.Tower7Calibrated;
-                save.TowerCalibrations[7] = form.Tower8Calibrated;
-                save.TowerCalibrations[8] = form.Tower9Calibrated;
-                save.TowerCalibrations[9] = form.Tower10Calibrated;
-                save.TowerAttempts[0] = form.Tower1Attempts;
-                save.TowerAttempts[1] = form.Tower2Attempts;
-                save.TowerAttempts[2] = form.Tower3Attempts;
-                save.TowerAttempts[3] = form.Tower4Attempts;
-                save.TowerAttempts[4] = form.Tower5Attempts;
-                save.TowerAttempts[5] = form.Tower6Attempts;
-                save.TowerAttempts[6] = form.Tower7Attempts;
-                save.TowerAttempts[7] = form.Tower8Attempts;
-                save.TowerAttempts[8] = form.Tower9Attempts;
-                save.TowerAttempts[9] = form.Tower10Attempts;
-                // Bikanel
-                save.SuccessfulDigs = form.SuccessfulDigs;
-                save.FailedDigs = form.FailedDigs;
-                // Besaid
-                save.GunnerPoints = form.GunnerPoints;
-                // Chocobo
-                save.ChocoboSuccesses = form.ChocoboSuccesses;
-                save.PahsanaGreens = form.PahsanaGreens;
-                save.MimettGreens = form.MimettGreens;
-                save.SylkisGreens = form.SylkisGreens;
-                save.GysahlGreens = form.GysahlGreens;
-                // Gagazet
-                save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
-                save.KimahriSelfEsteem = form.KimahriSelfEsteem;
-                // Misc
-                save.Faction = form.Faction;
-                save.Encounters = form.Encounters;
-                save.OakaDept = form.OakaDebt;
-
-                save.WriteMiniGames();
+                save.CommitMiniGames(() =>
+                {
+                    // Calm Lands
+                    save.OpenAirCredits = form.OpenAirCredits;
+                    save.OpenAirPoints = form.OpenAirPoints;
+                    save.ArgentCredits = form.ArgentCredits;
+                    save.ArgentPoints = form.ArgentPoints;
+                    save.MarraigePoints = form.MarraigePoints;
+                    save.SlCredits = form.CreditsCh5;
+                    save.SlCredits5 = form.Credits2Ch5;
+                    save.HoverRides = form.HoverRides;
+                    // Thunder
+                    save.TowerCalibrations[0] = form.Tower1Calibrated;
+                    save.TowerCalibrations[1] = form.Tower2Calibrated;
+                    save.TowerCalibrations[2] = form.Tower3Calibrated;
+                    save.TowerCalibrations[3] = form.Tower4Calibrated;
+                    save.TowerCalibrations[4] = form.Tower5Calibrated;
+                    save.TowerCalibrations[5] = form.Tower6Calibrated;
+                    save.TowerCalibrations[6] = form.Tower7Calibrated;
+                    save.TowerCalibrations[7] = form.Tower8Calibrated;
+                    save.TowerCalibrations[8] = form.Tower9Calibrated;
+                    save.TowerCalibrations[9] = form.Tower10Calibrated;
+                    save.TowerAttempts[0] = form.Tower1Attempts;
+                    save.TowerAttempts[1] = form.Tower2Attempts;
+                    save.TowerAttempts[2] = form.Tower3Attempts;
+                    save.TowerAttempts[3] = form.Tower4Attempts;
+                    save.TowerAttempts[4] = form.Tower5Attempts;
+                    save.TowerAttempts[5] = form.Tower6Attempts;
+                    save.TowerAttempts[6] = form.Tower7Attempts;
+                    save.TowerAttempts[7] = form.Tower8Attempts;
+                    save.TowerAttempts[8] = form.Tower9Attempts;
+                    save.TowerAttempts[9] = form.Tower10Attempts;
+                    // Bikanel
+                    save.SuccessfulDigs = form.SuccessfulDigs;
+                    save.FailedDigs = form.FailedDigs;
+                    // Besaid
+                    save.GunnerPoints = form.GunnerPoints;
+                    // Chocobo
+                    save.ChocoboSuccesses = form.ChocoboSuccesses;
+                    save.PahsanaGreens = form.PahsanaGreens;
+                    save.MimettGreens = form.MimettGreens;
+                    save.SylkisGreens = form.SylkisGreens;
+                    save.GysahlGreens = form.GysahlGreens;
+                    // Gagazet
+                    save.KimahriSelfEsteemCh2 = form.KimahriSelfEsteemCh2;
+                    save.KimahriSelfEsteem = form.KimahriSelfEsteem;
+                    // Misc
+                    save.Faction = form.Faction;
+                    save.Encounters = form.Encounters;
+                    save.OakaDept = form.OakaDebt;
+                });
             }
         }
 

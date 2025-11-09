@@ -77,6 +77,9 @@
     <Compile Include="CalmLands.xaml.cs">
       <DependentUpon>CalmLands.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MultiBlueBullets.xaml.cs">
+      <DependentUpon>MultiBlueBullets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\HeaderConverters.cs" />
     <Compile Include="Crc.cs" />
     <Compile Include="Models\StoryFlag.cs" />
@@ -90,6 +93,10 @@
     <Compile Include="Utils.cs" />
     <Page Include="BlueBullets.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MultiBlueBullets.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ThunderPlains.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -232,10 +239,25 @@
     <Resource Include="Resources\whitemage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Build artifact settings -->
+  <PropertyGroup>
+    <!-- Keep last N versioned artifacts (exe/pdb/config) -->
+    <VersionedArtifactsToKeep Condition="'$(VersionedArtifactsToKeep)' == ''">5</VersionedArtifactsToKeep>
+    <!-- Include metadata (timestamp/git) in versioned artifact name; default true in Debug -->
+    <IncludeBuildMetadata Condition="'$(IncludeBuildMetadata)' == '' and '$(Configuration)' == 'Debug'">true</IncludeBuildMetadata>
+    <IncludeBuildMetadata Condition="'$(IncludeBuildMetadata)' == ''">false</IncludeBuildMetadata>
+  </PropertyGroup>
+  <!-- Import optional shared version props (kept in sync by IncrementVersion.ps1) -->
+  <Import Project="Version.props" Condition="Exists('Version.props')" />
   <!-- Auto version increment before build -->
   <Target Name="AutoIncrementVersion" BeforeTargets="BeforeBuild">
     <Message Text="Incrementing Assembly Version..." Importance="high" />
     <Exec Command="powershell -ExecutionPolicy Bypass -NoProfile -File &quot;$(ProjectDir)BuildTools\IncrementVersion.ps1&quot; -Part revision" ContinueOnError="false" />
+  </Target>
+  <!-- Create versioned copies, write LATEST.txt, optionally add metadata, and prune old artifacts -->
+  <Target Name="AfterBuild">
+    <Message Text="Creating versioned artifacts for $(AssemblyName) from $(TargetPath)" Importance="high" />
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;&amp; { $ErrorActionPreference='Stop'; $exe='$(TargetPath)'; $dir='$(TargetDir)'; $asm='$(AssemblyName)'; if (-not (Test-Path $exe)) { exit 0 }; $ver=(Get-Item $exe).VersionInfo.FileVersion; if (-not $ver) { $ver='0.0.0.0' }; $metadata=''; $includeMeta = '$(IncludeBuildMetadata)'; if ($includeMeta -and $includeMeta.ToString().ToLower() -eq 'true') { try { if (Test-Path (Join-Path $PSScriptRoot '..\.git')) { $gitRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path } else { $gitRoot = $dir }; $sha = (git -C $gitRoot rev-parse --short HEAD) 2&gt;$null; if ([string]::IsNullOrWhiteSpace($sha)) { $sha = '' } } catch { $sha = '' }; $ts = (Get-Date).ToString('yyyyMMddHHmm'); if (-not [string]::IsNullOrWhiteSpace($sha)) { $metadata = '-' + $ts + '-' + $sha } else { $metadata = '-' + $ts } }; $baseName = ($asm + '-v' + $ver + $metadata); $outfileExe = Join-Path $dir ($baseName + '.exe'); Copy-Item -Force $exe $outfileExe; $pdb = Join-Path $dir ($asm + '.pdb'); if (Test-Path $pdb) { Copy-Item -Force $pdb (Join-Path $dir ($baseName + '.pdb')) }; $cfg = $exe + '.config'; if (Test-Path $cfg) { Copy-Item -Force $cfg (Join-Path $dir ($baseName + '.exe.config')) }; $latestFile = Join-Path $dir 'LATEST.txt'; Set-Content -Path $latestFile -Value $baseName -Encoding ASCII; $keep = [int]'$(VersionedArtifactsToKeep)'; if ($keep -gt 0) { $pattern = $asm + '-v*.exe'; $files = Get-ChildItem -Path $dir -Filter $pattern | Sort-Object LastWriteTime -Descending; if ($files.Count -gt $keep) { $toRemove = $files | Select-Object -Skip $keep; foreach ($f in $toRemove) { $nameNoExt = [System.IO.Path]::GetFileNameWithoutExtension($f.Name); Remove-Item -Force $f.FullName -ErrorAction SilentlyContinue; $p = Join-Path $dir ($nameNoExt + '.pdb'); if (Test-Path $p) { Remove-Item -Force $p -ErrorAction SilentlyContinue }; $c = Join-Path $dir ($nameNoExt + '.exe.config'); if (Test-Path $c) { Remove-Item -Force $c -ErrorAction SilentlyContinue } } } }; Write-Host ('Versioned artifacts created: ' + $outfileExe) }&quot;" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

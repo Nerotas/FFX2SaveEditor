@@ -36,5 +36,17 @@ namespace FFX2SaveEditor
  }
  DialogResult = true;
  }
+
+ private void MasterAll_Click(object sender, RoutedEventArgs e)
+ {
+  foreach (var child in SkillsPanel.Children)
+  {
+   if (child is CheckBox cb && cb.Tag is Ability ability)
+   {
+	cb.IsChecked = true;
+	ability.Ap = ability.MaxAp;
+   }
+  }
+ }
  }
 }

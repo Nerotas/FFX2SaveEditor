@@ -20,16 +20,17 @@ namespace FFX2SaveEditor
     /// </summary>
     public partial class ThunderPlains : Window
     {
-        public byte Tower1Calibrated { get { return (bool)chkTower1.IsChecked ? (byte)1:(byte)0; } set { chkTower1.IsChecked = value == 1; } }
-        public byte Tower2Calibrated { get { return (bool)chkTower2.IsChecked ? (byte)1:(byte)0; } set { chkTower2.IsChecked = value==1; } }
-        public byte Tower3Calibrated { get { return (bool)chkTower3.IsChecked ? (byte)1:(byte)0; } set { chkTower3.IsChecked = value==1; } }
-        public byte Tower4Calibrated { get { return (bool)chkTower4.IsChecked ? (byte)1:(byte)0; } set { chkTower4.IsChecked = value==1; } }
-        public byte Tower5Calibrated { get { return (bool)chkTower5.IsChecked ? (byte)1:(byte)0; } set { chkTower5.IsChecked = value==1; } }
-        public byte Tower6Calibrated { get { return (bool)chkTower6.IsChecked ? (byte)1:(byte)0; } set { chkTower6.IsChecked = value==1; } }
-        public byte Tower7Calibrated { get { return (bool)chkTower7.IsChecked ? (byte)1:(byte)0; } set { chkTower7.IsChecked = value==1; } }
-        public byte Tower8Calibrated { get { return (bool)chkTower8.IsChecked ? (byte)1:(byte)0; } set { chkTower8.IsChecked = value==1; } }
-        public byte Tower9Calibrated { get { return (bool)chkTower9.IsChecked ? (byte)1:(byte)0; } set { chkTower9.IsChecked = value==1; } }
-        public byte Tower10Calibrated { get { return (bool)chkTower10.IsChecked ? (byte)1 : (byte)0; } set { chkTower10.IsChecked = value==1; } }
+        // Treat calibration as score - checkbox shows if score >25, but we store actual score
+        public byte Tower1Calibrated { get { return (bool)chkTower1.IsChecked ? (byte)30:(byte)0; } set { chkTower1.IsChecked = value > 25; } }
+        public byte Tower2Calibrated { get { return (bool)chkTower2.IsChecked ? (byte)30:(byte)0; } set { chkTower2.IsChecked = value > 25; } }
+        public byte Tower3Calibrated { get { return (bool)chkTower3.IsChecked ? (byte)30:(byte)0; } set { chkTower3.IsChecked = value > 25; } }
+        public byte Tower4Calibrated { get { return (bool)chkTower4.IsChecked ? (byte)30:(byte)0; } set { chkTower4.IsChecked = value > 25; } }
+        public byte Tower5Calibrated { get { return (bool)chkTower5.IsChecked ? (byte)30:(byte)0; } set { chkTower5.IsChecked = value > 25; } }
+        public byte Tower6Calibrated { get { return (bool)chkTower6.IsChecked ? (byte)30:(byte)0; } set { chkTower6.IsChecked = value > 25; } }
+        public byte Tower7Calibrated { get { return (bool)chkTower7.IsChecked ? (byte)30:(byte)0; } set { chkTower7.IsChecked = value > 25; } }
+        public byte Tower8Calibrated { get { return (bool)chkTower8.IsChecked ? (byte)30:(byte)0; } set { chkTower8.IsChecked = value > 25; } }
+        public byte Tower9Calibrated { get { return (bool)chkTower9.IsChecked ? (byte)30:(byte)0; } set { chkTower9.IsChecked = value > 25; } }
+        public byte Tower10Calibrated { get { return (bool)chkTower10.IsChecked ? (byte)30 : (byte)0; } set { chkTower10.IsChecked = value > 25; } }
         public byte Tower1Attempts { get { return byte.Parse(tbxTower1Attempts.Text); } set { tbxTower1Attempts.Text = value.ToString(); } }
         public byte Tower2Attempts { get { return byte.Parse(tbxTower2Attempts.Text); } set { tbxTower2Attempts.Text = value.ToString(); } }
         public byte Tower3Attempts { get { return byte.Parse(tbxTower3Attempts.Text); } set { tbxTower3Attempts.Text = value.ToString(); } }
